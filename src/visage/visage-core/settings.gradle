@@ -1,0 +1,4 @@
+rootProject.name = 'visage-core'
+
+
+enableFeaturePreview('GRADLE_METADATA')
