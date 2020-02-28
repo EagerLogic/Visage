@@ -6,7 +6,7 @@ object Rmi {
     var authenticationFailedHandler: (() -> Unit)? = null
     var authorizationFailedHandler: (() -> Unit)? = null
     var rmiExceptionHandler: ((message: String) -> Unit)? = null
-    var backendErrorHandler: ((message: String) -> Unit)? = null
+    var backendErrorHandler: (() -> Unit)? = null
     var frontendErrorHandle: ((ex: Throwable) -> Unit)? = null
 
 }

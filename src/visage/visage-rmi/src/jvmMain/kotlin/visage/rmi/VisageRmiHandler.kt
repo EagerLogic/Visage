@@ -3,6 +3,7 @@ package visage.rmi
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.stringify
+import java.lang.reflect.InvocationTargetException
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberFunctions
 
@@ -58,21 +59,28 @@ class VisageRmiHandler private constructor() {
                 val res = callerMethod!!.call(ctrlInstance, params.methodParams, userLevel)
                 rmiRes = RmiResult(ERmiResultType.Success, res.toString())
                 status = 200
-            } catch (ex: AuthenticationFailedException) {
-                rmiRes = RmiResult(ERmiResultType.AuthenticationFailed, "")
-                status = 200
-            } catch (ex: AuthorizationFailedException) {
-                rmiRes = RmiResult(ERmiResultType.AuthorizationFailed, "")
-                status = 200
-            } catch (ex: RmiException) {
-                rmiRes = RmiResult(ERmiResultType.AuthorizationFailed, ex.message!!)
-                status = 200
-            } catch (ex: RedirectException) {
-                rmiRes = RmiResult(ERmiResultType.AuthorizationFailed, Json.stringify(RmiRedirectResult.serializer(), RmiRedirectResult(ex.url, ex.hard)))
-                status = 200
-            } catch (ex: Exception) {
-                rmiRes = RmiResult(ERmiResultType.AuthorizationFailed, ex.message!!)
-                status = 500
+            } catch (ex: InvocationTargetException) {
+                when (ex.targetException) {
+                    is AuthenticationFailedException -> {
+                        rmiRes = RmiResult(ERmiResultType.AuthenticationFailed, "")
+                        status = 200
+                    }
+                    is AuthorizationFailedException -> {
+                        rmiRes = RmiResult(ERmiResultType.AuthorizationFailed, "")
+                        status = 200
+                    }
+                    is RmiException -> {
+                        rmiRes = RmiResult(ERmiResultType.RmiException, ex.message!!)
+                        status = 200
+                    }
+                    is RedirectException -> {
+                        rmiRes = RmiResult(ERmiResultType.Redirect, Json.stringify(RmiRedirectResult.serializer(), RmiRedirectResult((ex.targetException as RedirectException).url, (ex.targetException as RedirectException).hard)))
+                        status = 200
+                    }
+                    else -> {
+                        throw ex
+                    }
+                }
             }
             resp.sendResponse(status, Json.stringify(RmiResult.serializer(), rmiRes!!))
 

@@ -27,6 +27,11 @@ abstract class AScene<GProps, GModel, GState : Any, GController : AController<GP
             return controller
         }
 
+    override fun onComponentWillUnmount() {
+        val key = this::class.simpleName + ":" + this.props.toString()
+        controllerCache.remove(key)
+    }
+
     protected abstract fun createController(): GController
 
 }

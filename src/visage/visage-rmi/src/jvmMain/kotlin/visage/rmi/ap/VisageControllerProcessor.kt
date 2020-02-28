@@ -132,7 +132,6 @@ package ${ctrl.pkg}
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import visage.rmi.*
-import kotlin.reflect.full.findAnnotation
 
 abstract class A${ctrl.name}ControllerBe {
 
@@ -195,8 +194,10 @@ abstract class A${ctrl.name}ControllerBe {
             sb.append(")\n")
 
             sb.append("        val callParamsParsed = Json.parse(CallParamsWrapper.serializer(), params)\n")
-            sb.append("        val funDef = this::${fd.name}\n")
-            sb.append("        val authAnnotation = funDef.findAnnotation<Authenticated>()\n")
+            sb.append("        val method = this::class.java.declaredMethods.firstOrNull() {\n")
+            sb.append("            it.name == \"${fd.name}\"\n")
+            sb.append("        }\n")
+            sb.append("        val authAnnotation = method!!.getAnnotation(Authenticated::class.java)\n")
             sb.append("        if (authAnnotation != null) {\n")
             sb.append("            if (userLevel == null) {\n")
             sb.append("                throw AuthenticationFailedException()\n")

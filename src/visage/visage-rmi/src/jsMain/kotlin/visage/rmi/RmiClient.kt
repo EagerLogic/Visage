@@ -32,8 +32,10 @@ class RmiClient private constructor() {
                         LoadIndicator.loadEnded()
 
                         val resStr = xhr.responseText
-                        if (xhr.status >= 200 && xhr.status <= 299 || xhr.status == 500.toShort()) {
+                        if (xhr.status >= 200 && xhr.status <= 299) {
                             resolve(Json.parse(RmiResult.serializer(), resStr))
+                        } else if (xhr.status == 500.toShort()) {
+                            resolve(RmiResult(ERmiResultType.Error, ""))
                         } else  {
                             reject(Exception(resStr))
                         }
@@ -88,12 +90,11 @@ class RmiClient private constructor() {
                         }
                     }
                     ERmiResultType.Error -> {
-                        val message = it.data
                         if (Rmi.backendErrorHandler != null) {
-                            Rmi.backendErrorHandler!!(message)
+                            Rmi.backendErrorHandler!!()
                             res.resume(model)
                         } else {
-                            res.resumeWithException(BackendException(message))
+                            res.resumeWithException(BackendException())
                         }
                     }
                     else -> {
