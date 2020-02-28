@@ -63,7 +63,7 @@ abstract class AController<GProps, GModel, GState : Any>(
         }
         set(value) {
             this.scene.state = value
-            Visage.render()
+            this.scene.refresh()
         }
 
     protected abstract fun init()
@@ -74,6 +74,6 @@ abstract class AController<GProps, GModel, GState : Any>(
             this._model = newModel
         }
 
-        Visage.render()
+        this.scene.refresh()
     }
 }

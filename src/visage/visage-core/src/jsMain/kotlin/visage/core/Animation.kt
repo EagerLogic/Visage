@@ -24,13 +24,16 @@ class Animation(
     val duration: Int,
     val binding: KMutableProperty0<Int>? = null,
     val repeat: Int = 0,
-    val loopType: EAnimationLoopType = EAnimationLoopType.NONE
+    val loopType: EAnimationLoopType = EAnimationLoopType.NONE,
+    init: (Animation.() -> Unit)? = null
 ) {
 
     /**
      * Refresh only the given component
      */
     var updateComponent: AComponent<*>? = null
+
+    var disableAutoRerender: Boolean = false
 
     /**
      * Event that triggers when animation updated (eg: steps to the next update cycle)
@@ -58,6 +61,10 @@ class Animation(
         private set
 
     private var startTime: Long? = null
+
+    init {
+        init?.invoke(this)
+    }
 
     /**
      * Orders the animator to start the animation
@@ -204,13 +211,13 @@ class Animator private constructor() {
 
                 if (animation.updateComponent != null) {
                     animation.updateComponent!!.refresh()
-                } else {
+                } else if (!animation.disableAutoRerender) {
                     rerender = true
                 }
             }
 
             if (rerender) {
-                Visage.render()
+                Visage.rerender()
             }
         }
     }

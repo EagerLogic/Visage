@@ -38,7 +38,9 @@ abstract class AComponent<GState : Any> : IChildScope {
     lateinit var state: GState
 
     internal var _children_internal = mutableListOf<AComponent<*>>()
+    internal var _children_external: List<AComponent<*>>? = null
     internal var _dom_node: Node? = null
+    internal var _invalid: Boolean = true
 
     internal val type: String
         get() {
@@ -75,15 +77,22 @@ abstract class AComponent<GState : Any> : IChildScope {
     }
 
     fun refresh() {
+        this._invalid = true
         Visage.render()
     }
 
     abstract fun Components.render(children: List<AComponent<*>>)
 
     internal fun doRender() {
-        val externalChildren = this._children_internal
+        val externalChildren = if (this._children_external == null) {
+            this._children_external = this._children_internal
+            this._children_internal
+        } else {
+            this._children_external!!
+        }
         this._children_internal = mutableListOf()
         ChildProxy(this).render(externalChildren)
+        this._invalid = false
     }
 
     internal fun _init_state_internal() {
