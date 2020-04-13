@@ -12,6 +12,14 @@ kotlin {
     js {
         browser {
         }
+        compilations.all {
+            kotlinOptions {
+                sourceMap = true
+                metaInfo = true
+                sourceMapEmbedSources = "always"
+
+            }
+        }
     }
 
     sourceSets {

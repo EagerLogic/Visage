@@ -3,9 +3,36 @@ package visage.core
 import org.w3c.dom.Node
 import kotlin.browser.window
 
-class Reconciler private constructor() {
+internal class Reconciler private constructor() {
 
     companion object {
+
+        fun reconcileComponent(comp: AComponent<*>, parentNode: Node, beforeNode: Node?) {
+            if (comp._invalid) {
+                val oldChildren = comp._children_internal
+                comp.doRender()
+                var newParentNode: Node = parentNode
+                var newBeforeNode: Node? = beforeNode
+                if (comp is IDomNode) {
+                    if (comp._dom_node == null) {
+                        comp._dom_node = comp.createNode()
+                    }
+                    newParentNode = comp._dom_node!!
+                    newBeforeNode = null
+                }
+                mergeComponents(oldChildren as List<AComponent<Any>>, comp._children_internal as List<AComponent<Any>>, newParentNode, newBeforeNode, comp)
+            } else {
+                var newParentNode: Node = parentNode
+                var newBeforeNode: Node? = beforeNode
+                if (comp is IDomNode) {
+                    newParentNode = comp._dom_node!!
+                    newBeforeNode = null
+                }
+                comp._children_internal.forEach {
+                    reconcileComponent(it, newParentNode, newBeforeNode)
+                }
+            }
+        }
 
         fun mergeComponents(oldComponents: List<AComponent<Any>>, newComponents: List<AComponent<Any>>, parentNode: Node, beforeNode: Node?, parentComponent: AComponent<*>?) {
             val uows = mutableListOf<Uow>()
