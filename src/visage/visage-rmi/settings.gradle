@@ -1,4 +1,0 @@
-rootProject.name = 'visage-rmi'
-
-
-enableFeaturePreview('GRADLE_METADATA')

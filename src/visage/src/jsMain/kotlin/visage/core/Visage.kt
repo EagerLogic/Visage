@@ -7,7 +7,6 @@ internal class MigoRouteComponent(val renderMethod: Components.() -> Unit) : APu
     override fun Components.render(children: List<AComponent<*>>) {
         this@MigoRouteComponent.renderMethod(this@MigoRouteComponent)
     }
-
 }
 
 class Visage private constructor() {

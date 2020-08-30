@@ -1,13 +1,12 @@
 package visage.rmi
 
+import kotlinx.browser.window
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.Serializer
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import visage.core.Event
 import org.w3c.xhr.XMLHttpRequest
 import visage.core.Navigation
-import kotlin.browser.window
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -17,9 +16,8 @@ class RmiClient private constructor() {
 
     companion object {
 
-        @UnstableDefault
         fun call(params: RmiParams): Promise<RmiResult> {
-            val data = Json.stringify(RmiParams.serializer(), params)
+            val data = Json.encodeToString(RmiParams.serializer(), params)
             return Promise<RmiResult>() { resolve, reject ->
                 val xhr = XMLHttpRequest()
 
@@ -33,7 +31,7 @@ class RmiClient private constructor() {
 
                         val resStr = xhr.responseText
                         if (xhr.status >= 200 && xhr.status <= 299) {
-                            resolve(Json.parse(RmiResult.serializer(), resStr))
+                            resolve(Json.decodeFromString(RmiResult.serializer(), resStr))
                         } else if (xhr.status == 500.toShort()) {
                             resolve(RmiResult(ERmiResultType.Error, ""))
                         } else  {
@@ -49,7 +47,7 @@ class RmiClient private constructor() {
             promise.then() {
                 when (it.type) {
                     ERmiResultType.Success -> {
-                        res.resume(Json.parse(deserializer, it.data))
+                        res.resume(Json.decodeFromString(deserializer, it.data))
                     }
                     ERmiResultType.AuthenticationFailed -> {
                         if (Rmi.authenticationFailedHandler != null) {
@@ -68,7 +66,7 @@ class RmiClient private constructor() {
                         }
                     }
                     ERmiResultType.Redirect -> {
-                        val redirectResult: RmiRedirectResult = Json.parse(RmiRedirectResult.serializer(), it.data)
+                        val redirectResult: RmiRedirectResult = Json.decodeFromString(RmiRedirectResult.serializer(), it.data)
                         res.resume(model)
                         if (Rmi.redirectHandler != null) {
                             Rmi.redirectHandler!!(redirectResult.url, redirectResult.isHard)

@@ -1,4 +1,0 @@
-rootProject.name = 'visage-dom'
-
-
-enableFeaturePreview('GRADLE_METADATA')

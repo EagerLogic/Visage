@@ -13,9 +13,10 @@ class MTag(name: String) :
 fun Components.tag(name: String, init: MTag.() -> Unit = {}) =
     this.registerComponent(MTag(name), init)
 
-open class TagAttributes : BaseTagAttributes() {
+open class TagAttributes() : BaseTagAttributes() {
 
     var id: String? by delegate("id")
+    var classes: String? by delegate("class")
 
 }
 
@@ -90,7 +91,6 @@ open class TagStyles : BaseTagStyles() {
     //    border-inline-start-width
     //    border-inline-style
     //    border-inline-width
-    //    border-left
     var borderLeft: String? by delegate("border-left")
     var borderLeftColor: String? by delegate("border-left-color")
     var borderLeftSize: String? by delegate("border-left-size")
@@ -144,14 +144,12 @@ open class TagStyles : BaseTagStyles() {
     //    counter-increment
     //    counter-reset
     //    counter-set
-    //    cursor
     var cursor: String? by delegate("cursor")
     //</editor-fold>
 
     //<editor-fold desc="D">
     //    deg
     //    direction
-    //    display
     var display: String? by delegate("display")
     //    dpcm
     //    dpi
@@ -268,13 +266,9 @@ open class TagStyles : BaseTagStyles() {
     //<editor-fold desc="M">
     //    margin
     var margin: String? by delegate("margin")
-    //    margin-block
-    var marginBBlock: String? by delegate("margin-block")
-    //    margin-block-end
+    var marginBlock: String? by delegate("margin-block")
     var marginBlockEnd: String? by delegate("margin-block-end")
-    //    margin-block-start
     var marginBlockStart: String? by delegate("margin-block-start")
-    //    margin-bottom
     var marginBottom: String? by delegate("margin-bottom")
     //    margin-inline
     //    margin-inline-end
@@ -295,7 +289,6 @@ open class TagStyles : BaseTagStyles() {
     var maxHeight: String? by delegate("max-height")
     var maxWidth: String? by delegate("max-width")
     //    min-block-size
-    //    min-height
     var minHeight: String? by delegate("min-height")
     //    min-inline-size
     var minWidth: String? by delegate("min-width")
@@ -353,7 +346,6 @@ open class TagStyles : BaseTagStyles() {
     //<editor-fold desc="R">
     //    resize
     //    revert
-    //    right
     var right: String? by delegate("right")
     //    rotate
     //    row-gap
@@ -437,7 +429,7 @@ open class TagStyles : BaseTagStyles() {
     //</editor-fold>
     var userSelect: String? by delegate("user-select")
     //<editor-fold desc="V">
-    var vericalAlign: String? by delegate("vertical-align")
+    var verticalAlign: String? by delegate("vertical-align")
     var visibility: String? by delegate("visibility")
     //</editor-fold>
 

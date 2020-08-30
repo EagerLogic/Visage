@@ -1,6 +1,5 @@
 package visage.rmi
 
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.stringify
 import java.lang.reflect.InvocationTargetException
@@ -11,11 +10,10 @@ class VisageRmiHandler private constructor() {
 
     companion object {
 
-        @UnstableDefault
         fun callRmi(req: IVisageRequest, resp: IVisageResponse, userLevelProvider: IVisageRmiUserLevelProvider?) {
             val inputJson = req.readContent()
 
-            val params: RmiParams = Json.parse(RmiParams.serializer(), inputJson)
+            val params: RmiParams = Json.decodeFromString(RmiParams.serializer(), inputJson)
 
             val aCtrlName = params.aControllerName
             val aClass = Class.forName(aCtrlName).kotlin
@@ -74,7 +72,7 @@ class VisageRmiHandler private constructor() {
                         status = 200
                     }
                     is RedirectException -> {
-                        rmiRes = RmiResult(ERmiResultType.Redirect, Json.stringify(RmiRedirectResult.serializer(), RmiRedirectResult((ex.targetException as RedirectException).url, (ex.targetException as RedirectException).hard)))
+                        rmiRes = RmiResult(ERmiResultType.Redirect, Json.encodeToString(RmiRedirectResult.serializer(), RmiRedirectResult((ex.targetException as RedirectException).url, (ex.targetException as RedirectException).hard)))
                         status = 200
                     }
                     else -> {
@@ -82,7 +80,7 @@ class VisageRmiHandler private constructor() {
                     }
                 }
             }
-            resp.sendResponse(status, Json.stringify(RmiResult.serializer(), rmiRes!!))
+            resp.sendResponse(status, Json.encodeToString(RmiResult.serializer(), rmiRes!!))
 
         }
 
