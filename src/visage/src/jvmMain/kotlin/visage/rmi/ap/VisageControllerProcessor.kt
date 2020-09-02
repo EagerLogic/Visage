@@ -20,16 +20,25 @@ import javax.tools.Diagnostic
 @SupportedAnnotationTypes("visage.rmi.VisageController")
 class VisageControllerProcessor : AbstractProcessor() {
 
-    private var commonPath: String = ""
-    private var jsPath: String = ""
-    private var jvmPath: String = ""
+    private var commonPath: String? = ""
+    private var jsPath: String? = ""
+    private var jvmPath: String? = ""
 
     override fun process(set: MutableSet<out TypeElement>, env: RoundEnvironment): Boolean {
         println("========== VisageControllerProcessor ==========")
 
-        commonPath = processingEnv.options.get("commonPath") as String
-        jvmPath = processingEnv.options.get("jvmPath") as String
-        jsPath = processingEnv.options.get("jsPath") as String
+        commonPath = processingEnv.options.get("commonPath")
+        if (commonPath == null) {
+            commonPath = "src/commonMain/kotlin/"
+        }
+        jvmPath = processingEnv.options.get("jvmPath")
+        if (jvmPath == null) {
+            jvmPath = "src/backendMain/kotlin/"
+        }
+        jsPath = processingEnv.options.get("jsPath")
+        if (jsPath == null) {
+            jsPath = "src/frontendMain/kotlin/"
+        }
 
         val p = processingEnv.options.get("jvmMainKotlinRoot")
         processingEnv.messager.printMessage(Diagnostic.Kind.WARNING, "########### run proc $p")
@@ -153,8 +162,8 @@ abstract class A${ctrl.name}ControllerBe {
     }
 
     fun init(propsStr: String, modelStr: String, request: VisageActionRequest, response: VisageActionResponse) {
-        props = Json.parse(${ctrl.propsType}.serializer(), propsStr)
-        model = Json.parse(${ctrl.modelType}.serializer(), modelStr)
+        props = Json.decodeFromString(${ctrl.propsType}.serializer(), propsStr)
+        model = Json.decodeFromString(${ctrl.modelType}.serializer(), modelStr)
         _request = request
         _response = response
     }
@@ -193,7 +202,7 @@ abstract class A${ctrl.name}ControllerBe {
             }
             sb.append(")\n")
 
-            sb.append("        val callParamsParsed = Json.parse(CallParamsWrapper.serializer(), params)\n")
+            sb.append("        val callParamsParsed = Json.decodeFromString(CallParamsWrapper.serializer(), params)\n")
             sb.append("        val method = this::class.java.declaredMethods.firstOrNull() {\n")
             sb.append("            it.name == \"${fd.name}\"\n")
             sb.append("        }\n")
@@ -215,20 +224,20 @@ abstract class A${ctrl.name}ControllerBe {
                 }
             }
             sb.append(")\n")
-            sb.append("        return Json.stringify(${ctrl.modelType}.serializer(), res)\n")
+            sb.append("        return Json.encodeToString(${ctrl.modelType}.serializer(), res)\n")
             sb.append("    }\n")
             sb.append("\n")
         }
 
         sb.append("}\n")
 
-        val fileUrl = this.getClassUrl(this.jvmPath, ctrl.pkg, className)
+        val fileUrl = this.getClassUrl(this.jvmPath!!, ctrl.pkg, className)
         writeFile(fileUrl, sb.toString())
     }
 
     private fun generateBeController(ctrl: ControllerDef) {
         val className = ctrl.name + "ControllerBe"
-        val fileUrl = this.getClassUrl(this.jvmPath, ctrl.pkg, className)
+        val fileUrl = this.getClassUrl(this.jvmPath!!, ctrl.pkg, className)
 
         if (File(fileUrl).exists()) return
 
@@ -332,7 +341,7 @@ abstract class A${ctrl.name}ControllerBe {
 
         sb.append(generateBackendProxy(ctrl))
 
-        val fileUrl = this.getClassUrl(this.jsPath, ctrl.pkg, className)
+        val fileUrl = this.getClassUrl(this.jsPath!!, ctrl.pkg, className)
         writeFile(fileUrl, sb.toString())
     }
 
@@ -369,7 +378,7 @@ abstract class A${ctrl.name}ControllerBe {
             }
             sb.append(")\n")
 
-            sb.append("        val params: String = Json.stringify(ParamsWrapper.serializer(), ParamsWrapper(")
+            sb.append("        val params: String = Json.encodeToString(ParamsWrapper.serializer(), ParamsWrapper(")
             fd.params.forEachIndexed { index, pd ->
                 if (index != 0) {
                     sb.append(",")
@@ -386,8 +395,8 @@ abstract class A${ctrl.name}ControllerBe {
             sb.append("            aControllerName = \"${ctrl.pkg}.A${ctrl.name}ControllerBe\",\n")
             sb.append("            methodName = \"${fd.name}\",\n")
             sb.append("            methodParams = params,\n")
-            sb.append("            props = Json.stringify(${replaceJavaType(ctrl.propsType)}.serializer(), controller.props),\n")
-            sb.append("            currentModel = Json.stringify(${replaceJavaType(ctrl.modelType)}.serializer(), controller.model)\n")
+            sb.append("            props = Json.encodeToString(${replaceJavaType(ctrl.propsType)}.serializer(), controller.props),\n")
+            sb.append("            currentModel = Json.encodeToString(${replaceJavaType(ctrl.modelType)}.serializer(), controller.model)\n")
             sb.append("        )\n")
 
             sb.append("        return suspendCoroutine { res ->\n")
@@ -405,7 +414,7 @@ abstract class A${ctrl.name}ControllerBe {
     private fun generateScene(ctrl: ControllerDef) {
         val className = "M" + ctrl.name + "Scene"
         val sceneStateClassName = ctrl.name + "SceneState"
-        val fileUrl = this.getClassUrl(this.jsPath, ctrl.pkg, ctrl.name + "Scene")
+        val fileUrl = this.getClassUrl(this.jsPath!!, ctrl.pkg, ctrl.name + "Scene")
 
         if (File(fileUrl).exists()) return
 
@@ -444,7 +453,7 @@ abstract class A${ctrl.name}ControllerBe {
 
     private fun generateFeController(ctrl: ControllerDef) {
         val className = ctrl.name + "ControllerFe"
-        val fileUrl = this.getClassUrl(this.jsPath, ctrl.pkg, className)
+        val fileUrl = this.getClassUrl(this.jsPath!!, ctrl.pkg, className)
 
         if (File(fileUrl).exists()) return
 

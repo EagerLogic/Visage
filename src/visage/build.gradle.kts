@@ -42,6 +42,7 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.0")
                 implementation("com.google.auto.service:auto-service:1.0-rc2")
+                configurations.get("kapt").dependencies.add(compileOnly("com.google.auto.service:auto-service:1.0-rc2"))
             }
         }
         val jvmTest by getting {
