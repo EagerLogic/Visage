@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.el"
-version = "0.1-Beta"
+version = "0.2"
 
 repositories {
     mavenCentral()
