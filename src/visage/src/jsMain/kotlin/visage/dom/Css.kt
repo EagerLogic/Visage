@@ -111,21 +111,22 @@ object Css {
             hashBase += "|${pseudoStyleStr}"
         }
         val hash = hashBase.hash()
+        val className = "vsg-$hash"
 
-        if (addedStyles[hash] != null) {
-            return hash
+        if (addedStyles[className] != null) {
+            return className
         }
 
-        addedStyles[hash] = true
+        addedStyles[className] = true
 
-        var style = ".${hash} {${cssStr}}\n"
+        var style = ".${className} {${cssStr}}\n"
         for (item in pseudoStrs) {
-            style += "${hash}${item.key} {${item.value}}\n"
+            style += ".${className}${item.key} {${item.value}}\n"
         }
 
         this.addStyleElement(style)
 
-        return hash
+        return className
     }
 
     private fun applyCssBlock(selector: String, block: CssBlock) {
