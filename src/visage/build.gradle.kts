@@ -1,3 +1,5 @@
+import java.net.URI
+
 plugins {
     kotlin("multiplatform") version "1.4.0"
     kotlin("plugin.serialization") version "1.4.0"
@@ -54,6 +56,20 @@ kotlin {
         val jsTest by getting {
             dependencies {
                 implementation(kotlin("test-js"))
+            }
+        }
+    }
+}
+
+publishing {
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = URI("https://maven.pkg.github.com/EagerLogic/Visage")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
