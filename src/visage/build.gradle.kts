@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.el"
-version = "0.2.1"
+version = "0.2.3"
 
 repositories {
     mavenCentral()
@@ -65,11 +65,40 @@ publishing {
 
     repositories {
         maven {
-            name = "GitHubPackages"
-            url = URI("https://maven.pkg.github.com/EagerLogic/Visage")
+            name = "Bintray"
+            url = URI("https://api.bintray.com/maven/dipacs/Visage/Visage/;publish=1;override=0")
             credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+                username = "dipacs"
+                password = System.getenv("BINTRAY_KEY")
+            }
+        }
+    }
+
+    publications {
+        filterIsInstance<MavenPublication>().forEach { publication ->
+            publication.pom {
+                name.set(project.name)
+                description.set(project.description)
+                packaging = "jar"
+//                url.set("https://github.com/serpro69/${project.name}")
+//                developers {
+//                    developer {
+//                        id.set("serpro69")
+//                        name.set("Sergii Prodan")
+//                        email.set("serpro@disroot.org")
+//                    }
+//                }
+//                licenses {
+//                    license {
+//                        name.set("MIT")
+//                        url.set("https://github.com/serpro69/${project.name}/blob/master/LICENCE.md")
+//                    }
+//                }
+//                scm {
+//                    connection.set("scm:git:https://github.com/serpro69/${project.name}.git")
+//                    developerConnection.set("scm:git:git@github.com:serpro69/${project.name}.git")
+//                    url.set("https://github.com/serpro69/${project.name}")
+//                }
             }
         }
     }
