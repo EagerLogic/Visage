@@ -2,7 +2,7 @@
 Visage is a WEB frontend framework for Kotlin. The main goal of this project is to create a framework which is designed from the ground up to work perfectly with Kotlin and utilise the language features to make frontend developers life much easier covering most of the aspects of frontend development.
 
 ## Modules
-Visage contains different modules not just the UI Part.
+Visage contains different modules not just the UI Part. At this time, Visage is an all in one library which means all the following modules are packed in the Visage library, but you don't need to use all of them. In a later time it may be sliced to different standalone modules but not now.
 
 ### Core (React like UI API)
 The core of Visage is a React like UI API which enables you to create stunning frontends a declarative way using Kotlin's typesafe builders. Just like in React you can put together default HTML elements but you can also define your own components to split your code. Kotlin as a language has much more potential than which can be achieved with simple JSX or with a React wrapper. The goal of this module is to keep what is outstanding in React (declarative UI development and virtual DOM) but enhance it and fix some problems with React which can be done better using Kotlin.
@@ -18,5 +18,10 @@ This module is responsible to easily create CSS classes in Kotlin code, next to 
 
 ### RMI
 This module helps a lot to communicate with any JVM backend. The goal of this project is to create client-server communication as painful as possible, using annotation processor generated shared controllers, which methods can be called from the client as a single method call. You will learn more from the concept of sharing controller and model between frontend and backend as a stateless way but it is similar what JSF do but in a stateless and typesafe way. This is also an optional module, you don't need to use it, you can use your own method to communicate with any backend using fetch or whatever.
+
+### Components (Coming soon)
+This module contains basic Visage components (like Button, TextField, RadioButton, etc...) and layouts (like HBox, VBox, Grid, etc...) which can be used out of the box to create stunning UI-s. This is an optional module, you don't need to use any of this components, you can use your own or any other third party Visage components.
+
+
 
 
