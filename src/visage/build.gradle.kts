@@ -87,7 +87,7 @@ val ossUser = System.getenv("OSS_USER")
 val ossPassword = System.getenv("OSS_PASSWORD")
 extra["signing.keyId"] = System.getenv("SIGNING_KEY_ID")
 extra["signing.password"] = System.getenv("SIGNING_PASSWORD")
-extra["signing.secretKeyRingFile"] = "/~/.gnupg/private.key"
+extra["signing.secretKeyRingFile"] = "/home/runner/.gnupg/trustdb.gpg"
 
 val libraryVersion: String = version as String
 val publishedGroupId: String = group as String
