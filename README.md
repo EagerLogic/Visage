@@ -19,7 +19,7 @@ This module is responsible to easily create CSS classes in Kotlin code, next to 
 ### RMI
 This module helps a lot to communicate with any JVM backend. The goal of this project is to create client-server communication as painful as possible, using annotation processor generated shared controllers, which methods can be called from the client as a single method call. You will learn more from the concept of sharing controller and model between frontend and backend as a stateless way but it is similar what JSF do but in a stateless and typesafe way. This is also an optional module, you don't need to use it, you can use your own method to communicate with any backend using fetch or whatever.
 
-### Validation
+### Validation (Coming soon)
 A simple but powerful common validation library to eliminate the need to rewrite the validation code on both client and server side. This is also an optional modul.
 
 ### Components (Coming soon)
