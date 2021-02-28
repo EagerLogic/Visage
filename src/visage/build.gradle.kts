@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "io.github.eagerlogic"
-version = "0.2.9"
+version = "0.2.10"
 
 repositories {
     jcenter()
@@ -87,7 +87,7 @@ val ossUser = System.getenv("OSS_USER")
 val ossPassword = System.getenv("OSS_PASSWORD")
 extra["signing.keyId"] = System.getenv("SIGNING_KEY_ID")
 extra["signing.password"] = System.getenv("SIGNING_PASSWORD")
-extra["signing.secretKeyRingFile"] = "/home/runner/.gnupg/trustdb.gpg"
+extra["signing.secretKeyRingFile"] = "/home/runner/.gnupg/secring.gpg"
 
 val libraryVersion: String = version as String
 val publishedGroupId: String = group as String
