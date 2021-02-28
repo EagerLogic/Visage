@@ -73,7 +73,7 @@ object UrlMatcher {
         val tokens = tokenRegex.findAll(template).map {it.value}.toList()
         val variables = tokens.map { it.replace("[${delimiters.joinToString("")}]".toRegex(), "") }
 
-        var templateString = template.replace(specialCharRegex) { "\\${it.value}" }
+        var templateString = template.replace(specialCharRegex) { "\\${it.value}" }.replace("*", "(.)*")
         tokens.forEach {
             templateString = templateString.replace(it, "([^\\/]+)")
         }
