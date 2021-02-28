@@ -15,8 +15,6 @@ jobs:
           mkdir -p ~/.gnupg/
           printf "$GPG_SIGNING_KEY" | base64 --decode > ~/.gnupg/private.key
           gpg --batch --import ~/.gnupg/private.key
-          cd ~
-          ls
           cd src
           cd visage
           gradle clean build publish
