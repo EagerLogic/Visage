@@ -18,9 +18,10 @@ apply(plugin = "com.google.cloud.tools.appengine")
 group = "io.github.eagerlogic"
 version = "0.2.10"
 
-val visageVersion = "0.2.10"
+val visageVersion = "0.2.11"
 
 repositories {
+    mavenLocal()
     jcenter()
     mavenCentral()
 }
@@ -124,7 +125,8 @@ tasks.getByName("explodeWar") {
 
 configure<com.google.cloud.tools.gradle.appengine.standard.AppEngineStandardExtension>() {
     deploy {
-        projectId = "palletpacker-dev"
+        projectId = "visageui"
+        version = "0-2-10"
     }
     run {
         automaticRestart = true

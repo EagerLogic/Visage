@@ -42,7 +42,7 @@
 <!--        <listener-class>com.el.palletpacker.app.cl.CL</listener-class>-->
 <!--    </listener>-->
     <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.vsg</welcome-file>
     </welcome-file-list>
     
 <!--    <context-param>-->

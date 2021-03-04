@@ -1,7 +1,7 @@
 package visage.core
 
+import kotlinx.browser.window
 import org.w3c.dom.Node
-import kotlin.browser.window
 
 internal class Reconciler private constructor() {
 

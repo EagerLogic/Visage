@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "io.github.eagerlogic"
-version = "0.2.10"
+version = "0.2.11"
 
 repositories {
     jcenter()
@@ -26,6 +26,12 @@ kotlin {
     }
     js {
         browser {
+            compilations.all {
+                kotlinOptions {
+                    sourceMap = true
+                    sourceMapEmbedSources = "always"
+                }
+            }
             testTask {
                 useKarma {
                     useChromeHeadless()
@@ -72,15 +78,6 @@ tasks {
         archiveClassifier.set("javadoc")
         from(dokkaJavadoc.get().outputDirectory)
     }
-
-//    dokkaJavadoc {
-//        dokkaSourceSets {
-//            create("commonMain") {
-//                displayName = "common"
-//                platform = "common"
-//            }
-//        }
-//    }
 }
 
 val ossUser = System.getenv("OSS_USER")
@@ -107,9 +104,9 @@ val developerId = "dipacs"
 project.group = publishedGroupId
 project.version = libraryVersion
 
-signing {
-    sign(publishing.publications)
-}
+//signing {
+//    sign(publishing.publications)
+//}
 
 afterEvaluate {
     configure<PublishingExtension> {

@@ -5,7 +5,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.Node
 import org.w3c.dom.Text
 import org.w3c.dom.events.Event
-import kotlin.browser.document
+import kotlinx.browser.document
 import kotlin.reflect.KProperty
 
 abstract class ATag<GAttributes : BaseTagAttributes, GStyles : BaseTagStyles, GEvents : BaseTagEvents>(
