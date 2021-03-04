@@ -1,6 +1,12 @@
 # Visage
 Visage is a WEB frontend framework for Kotlin. The main goal of this project is to create a framework which is designed from the ground up to work perfectly with Kotlin and utilise the language features to make frontend developers life much easier covering most of the aspects of frontend development.
 
+## Documentation
+The documentation can be found on the webpage:
+https://visageui.appspot.com
+
+ At this time it's in a very early stage and under active development. Stay tuned to see whats coming.
+
 ## Modules
 Visage contains different modules not just the UI Part. At this time, Visage is an all in one library which means all the following modules are packed in the Visage library, but you don't need to use all of them. In a later time it may be sliced to different standalone modules but not now.
 
