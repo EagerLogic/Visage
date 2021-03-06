@@ -1,12 +1,12 @@
 package visage.ds.components
 
-import visage.ds.colorpalette.Skin
-import visage.ds.utils.EFontWeight
 import visage.core.*
 import visage.dom.Css
 import visage.dom.div
 import visage.dom.tag
 import visage.dom.text
+import visage.ds.colorpalette.Skin
+import visage.ds.utils.EFontWeight
 
 class CBasePageLayout : APureComposite() {
 
@@ -15,7 +15,7 @@ class CBasePageLayout : APureComposite() {
     override fun Components.render(children: List<AComponent<*>>) {
 
         div {
-            attr.classes = basePageRootStyle
+            classes = basePageRootStyle
 
             if (this@CBasePageLayout.isLoading) {
                 style.opacity = "0.5"
@@ -33,7 +33,7 @@ class CBasePageLayout : APureComposite() {
             }
 
             div {
-                attr.classes = sideBarRootStyle
+                classes = sideBarRootStyle
 
                 var menuFound = false
                 children.forEach {
@@ -49,7 +49,7 @@ class CBasePageLayout : APureComposite() {
             }
 
             div {
-                attr.classes = contentRootStyle
+                classes = contentRootStyle
 
                 children.forEach {
                     if (!(it is CMenu)){
@@ -102,10 +102,10 @@ class CMenu : APureComponent() {
 
     override fun Components.render(children: List<AComponent<*>>) {
         div {
-            attr.classes = menuRootStyle
+            classes = menuRootStyle
 
             div {
-                attr.classes = menuHeaderStyle
+                classes = menuHeaderStyle
 
                 if (this@CMenu.logoImageUrl != null) {
                     tag("img") {
@@ -123,7 +123,7 @@ class CMenu : APureComponent() {
 
 
             div {
-                attr.classes = menuTopBlockStyle
+                classes = menuTopBlockStyle
 
                 VScrollBox("100%") {
                     padding = "0px"
@@ -150,7 +150,7 @@ class CMenu : APureComponent() {
             }
 
             div {
-                attr.classes = menuBottomBlockStyle
+                classes = menuBottomBlockStyle
 
                 var isBottomItemFound = false
                 children.forEach {
@@ -221,7 +221,7 @@ class CMenuItemBlock(val isBottom: Boolean) : APureComponent() {
 
     override fun Components.render(children: List<AComponent<*>>) {
         div {
-            attr.classes = menuItemBlockRootStyle
+            classes = menuItemBlockRootStyle
 
             children.forEach {
                 this.addChild(it)
@@ -256,7 +256,7 @@ class CGroupMenuItem(
             }
 
             div {
-                attr.classes = groupMenuItemRootStyle
+                classes = groupMenuItemRootStyle
                 events.onClick = onClick@ {
                     children.forEach {
                         if (it is CChildMenuItem) {
@@ -274,7 +274,7 @@ class CGroupMenuItem(
                 }
 
                 div {
-                    attr.classes = "$groupMenuItemTitleBaseStyle $groupMenuItemTitleUnselectedStyle"
+                    classes = "$groupMenuItemTitleBaseStyle $groupMenuItemTitleUnselectedStyle"
 
                     text(this@CGroupMenuItem.title)
                 }
@@ -325,7 +325,7 @@ class CLeafMenuItem(val title: String, val icon: String, val href: String) : APu
     override fun Components.render(children: List<AComponent<*>>) {
         val isSelected = Navigation.currentLocation.path == this@CLeafMenuItem.href
         div {
-            attr.classes = leafMenuItemRootStyle
+            classes = leafMenuItemRootStyle
             events.onClick = { Navigation.pushLocation(this@CLeafMenuItem.href) }
 
             div {
@@ -336,7 +336,7 @@ class CLeafMenuItem(val title: String, val icon: String, val href: String) : APu
             }
 
             div {
-                attr.classes = "$leafMenuItemTitleBaseStyle ${if (isSelected) leafMenuItemTitleSelectedStyle else leafMenuItemTitleUnselectedStyle}"
+                classes = "$leafMenuItemTitleBaseStyle ${if (isSelected) leafMenuItemTitleSelectedStyle else leafMenuItemTitleUnselectedStyle}"
 
                 text(this@CLeafMenuItem.title)
             }
@@ -385,7 +385,7 @@ class CChildMenuItem(
     override fun Components.render(children: List<AComponent<*>>) {
         val isSelected = Navigation.currentLocation.path == this@CChildMenuItem.href
         div {
-            attr.classes = childMenuItemRootStyle
+            classes = childMenuItemRootStyle
             events.onClick = { Navigation.pushLocation(this@CChildMenuItem.href) }
 
             Icon("trip_origin", if (isSelected) Skin.palette.primaryColor else Skin.palette.lightTextWeak, 10)
@@ -393,7 +393,7 @@ class CChildMenuItem(
             div { style.width = "16px" }
 
             div {
-                attr.classes = "$childMenuItemTitleBaseStyle ${if (isSelected) childMenuItemTitleSelectedStyle else childMenuItemTitleUnselectedStyle}"
+                classes = "$childMenuItemTitleBaseStyle ${if (isSelected) childMenuItemTitleSelectedStyle else childMenuItemTitleUnselectedStyle}"
 
                 text(this@CChildMenuItem.title)
             }
@@ -437,7 +437,7 @@ private val childMenuItemTitleSelectedStyle = Css.createClass {
 class CGroup(val title: String) : APureComponent() {
     override fun Components.render(children: List<AComponent<*>>) {
         div {
-            attr.classes = groupStyle
+            classes = groupStyle
 
             text(this@CGroup.title)
         }

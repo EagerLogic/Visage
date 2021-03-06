@@ -2,11 +2,11 @@ package com.el.vds.components
 
 import kotlinx.browser.window
 import org.w3c.dom.HTMLInputElement
-import visage.ds.colorpalette.Skin
 import visage.core.AComponent
 import visage.core.Components
 import visage.core.IdGenerator
 import visage.dom.*
+import visage.ds.colorpalette.Skin
 import visage.ds.forms.FieldModel
 import visage.ds.utils.EFontWeight
 
@@ -61,10 +61,10 @@ class CTextField(val label: String, val model: FieldModel<String>) : AComponent<
         }
 
         div {
-            attr.classes = "$rootStyle $rootExtStyle"
+            classes = "$rootStyle $rootExtStyle"
 
             div {
-                attr.classes = "$baseSmallLabelStyle $smallLabelExtStyle"
+                classes = "$baseSmallLabelStyle $smallLabelExtStyle"
 
                 text(this@CTextField.label)
             }
@@ -72,13 +72,13 @@ class CTextField(val label: String, val model: FieldModel<String>) : AComponent<
                 style.apply { width = "100%" }
 
                 tag("input") {
-                    attr.id = this@CTextField.state.inputId
+                    id = this@CTextField.state.inputId
                     attr["type"] = if (this@CTextField.password) "password" else "text"
                     attr["value"] = this@CTextField.model.value
                     if (this@CTextField.disabled) {
                         attr["disabled"] = "true"
                     }
-                    attr.classes = inputStyle
+                    classes = inputStyle
 
                     events["focus"] = {
                         this@CTextField.updateFocusedState()
@@ -92,13 +92,13 @@ class CTextField(val label: String, val model: FieldModel<String>) : AComponent<
 
         if (this@CTextField.model.error != null) {
             div {
-                attr.classes = "$infoTextBaseStyle $infoTextErrorStyle"
+                classes = "$infoTextBaseStyle $infoTextErrorStyle"
 
                 text(this@CTextField.model.error!!)
             }
         } else if (this@CTextField.infoText != null) {
             div {
-                attr.classes = "$infoTextBaseStyle $infoTextNormalStyle"
+                classes = "$infoTextBaseStyle $infoTextNormalStyle"
 
                 text(this@CTextField.infoText!!)
             }

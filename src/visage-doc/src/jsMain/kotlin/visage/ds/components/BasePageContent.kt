@@ -1,13 +1,12 @@
 package visage.ds.components
 
-import visage.ds.utils.EFontWeight
 import visage.core.AComponent
 import visage.core.APureComposite
 import visage.core.Components
 import visage.dom.Css
 import visage.dom.div
-import visage.dom.text
 import visage.ds.colorpalette.Skin
+import visage.ds.utils.EFontWeight
 
 class CBasePageContent(
     val title: String
@@ -17,7 +16,7 @@ class CBasePageContent(
 
     override fun Components.render(children: List<AComponent<*>>) {
         div {
-            attr.classes = baseContainerStyle
+            classes = baseContainerStyle
             if (this@CBasePageContent.isLoading) {
                 style.apply {
                     opacity = "0.5"
@@ -26,12 +25,12 @@ class CBasePageContent(
             }
 
             div {
-                attr.classes = titleContainerStyle
+                classes = titleContainerStyle
 
                 div {
-                    attr.classes = titleTextStyle
+                    classes = titleTextStyle
 
-                    text(this@CBasePageContent.title)
+                    + this@CBasePageContent.title
                 }
             }
 
@@ -40,10 +39,10 @@ class CBasePageContent(
             }
 
             div {
-                attr.classes = contentWrapperStyle
+                classes = contentWrapperStyle
 
                 div {
-                    attr.classes = contentStyle
+                    classes = contentStyle
 
                     children.forEach {
                         this.addChild(it)

@@ -46,7 +46,7 @@ class CVScrollBox(val height: String) : AComposite<CVScrollBox.Companion.State>(
     override fun Components.render(children: List<AComponent<*>>) {
         val state = this@CVScrollBox.state
         div {
-            attr.classes = rootStyle
+            classes = rootStyle
             style.apply {
                 height = this@CVScrollBox.height
                 minHeight = height
@@ -54,12 +54,12 @@ class CVScrollBox(val height: String) : AComposite<CVScrollBox.Companion.State>(
             }
 
             div {
-                attr.classes = "vsb $hiddenScrollStyle"
-                attr.id = state.id
+                classes = "vsb $hiddenScrollStyle"
+                id = state.id
                 events["scroll"] = {this@CVScrollBox.refreshThumbSize()}
 
                 div {
-                    attr.classes = contentBoxStyle
+                    classes = contentBoxStyle
                     style.apply { padding = this@CVScrollBox.padding }
 
                     children.forEach {
@@ -69,7 +69,7 @@ class CVScrollBox(val height: String) : AComposite<CVScrollBox.Companion.State>(
             }
 
             div {
-                attr.classes = scrollThumbStyle
+                classes = scrollThumbStyle
                 style.apply {
                     backgroundColor = if (this@CVScrollBox.lightScrollThumb) "rgba(255,255,255, 0.3)" else "rgba(0,0,0, 0.3)"
                     height = "${state.scrollHeight}px"

@@ -1,9 +1,8 @@
 package visagedoc.components
 
-import visage.core.AComponent
-import visage.core.APureComponent
-import visage.core.APureComposite
-import visage.core.Components
+import visage.core.*
+import visage.dom.Css
+import visage.dom.div
 import visage.dom.tag
 import visage.dom.text
 import visage.ds.components.*
@@ -29,21 +28,32 @@ class CDocTitle(val title: String) : APureComponent() {
 
 fun CDocPage.title(title: String) = this.registerComponent(CDocTitle(title), {})
 
-class CDocParagraph() : APureComposite() {
-    override fun Components.render(children: List<AComponent<*>>) {
-        tag("p") {
-            style.textAlign = "justify"
-            children.forEach {
-                + it
-            }
+fun CDocPage.p(init: CFunctionalComponent.() -> Unit) = this.registerFunctionalComponent(init) {
+    tag("p") {
+        style.textAlign = "justify"
+        it.forEach {
+            + it
         }
     }
-
 }
 
-fun CDocPage.p(init: CDocParagraph.() -> Unit) = this.registerComponent(CDocParagraph(), init)
+fun CDocPage.codeBlock(code: String) = this.registerFunctionalComponent({}) {
+    div {
+        classes = codeBlockStyle
 
-fun CDocPage.codeBlock(code: String) = this.registerComponent(CCodeBlock(code), {})
+        + code
+    }
+}
+
+private val codeBlockStyle = Css.createClass {
+    width = "100%"
+    padding = "8px"
+    backgroundColor = "#f2f2f2"
+    color = "#333"
+    whiteSpace = "pre"
+    fontSize = "14px"
+    fontFamily = "monospace, monospace"
+}
 
 class CDocProperties() : APureComponent() {
 

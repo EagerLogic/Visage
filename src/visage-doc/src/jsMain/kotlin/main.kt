@@ -19,7 +19,6 @@ fun main() {
 fun startVisage() {
     console.log("Visage doc site starting...")
     Visage.init(window.document.getElementById("root") as HTMLElement) {
-
         MainScene()
     }
     Navigation.onLocationChanged.addListener {

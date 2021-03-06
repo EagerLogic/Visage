@@ -1,12 +1,12 @@
 package visage.ds.components
 
-import visage.ds.colorpalette.Skin
 import visage.core.AComponent
 import visage.core.APureComponent
 import visage.core.Components
 import visage.dom.Css
 import visage.dom.div
 import visage.dom.text
+import visage.ds.colorpalette.Skin
 
 class CIcon(val icon: String, val color: String, val size: Int) : APureComponent() {
 
@@ -14,7 +14,7 @@ class CIcon(val icon: String, val color: String, val size: Int) : APureComponent
 
     override fun Components.render(children: List<AComponent<*>>) {
         div {
-            attr.classes = "material-icons $iconClass"
+            classes = "material-icons $iconClass"
             style.fontSize = "${this@CIcon.size}px"
             style.color = this@CIcon.color
 

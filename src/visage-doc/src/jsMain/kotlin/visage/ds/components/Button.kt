@@ -19,9 +19,9 @@ class CButton(var text: String) : APureComponent() {
 
     override fun Components.render(children: List<AComponent<*>>) {
         div {
-            attr.classes = if (this@CButton.disabled) disabledButtonBaseClass else enabledButtonBaseClass
-            attr.classes += " " + this@CButton.size.styleClass
-            attr.classes += " " + createButtonStyleClass(this@CButton.variant, this@CButton.color)
+            classes = if (this@CButton.disabled) disabledButtonBaseClass else enabledButtonBaseClass
+            classes += " " + this@CButton.size.styleClass
+            classes += " " + createButtonStyleClass(this@CButton.variant, this@CButton.color)
 
             if (!this@CButton.disabled && this@CButton.onClick != null) {
                 events.onClick = { this@CButton.onClick?.invoke() }
