@@ -79,8 +79,10 @@ abstract class AComponent<GState : Any> : IChildScope {
     }
 
     fun refresh() {
-        this._invalid = true
-        Visage.render()
+        // TODO fix partial render
+//        this._invalid = true
+//        Visage.render()
+        Visage.rerender()
     }
 
     abstract fun Components.render(children: List<AComponent<*>>)
