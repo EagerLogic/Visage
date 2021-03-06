@@ -76,7 +76,6 @@ private val smallButtonStyleClass = Css.createClass {
     fontWeight = EFontWeight.Regular.cssValue
     borderWidth = "2px"
     borderStyle = "solid"
-    borderRadius = "3px"
 }
 
 private val normalButtonStyleClass = Css.createClass {
@@ -88,7 +87,6 @@ private val normalButtonStyleClass = Css.createClass {
     fontWeight = EFontWeight.SemiBold.cssValue
     borderWidth = "3px"
     borderStyle = "solid"
-    borderRadius = "4px"
 }
 
 private val largeButtonStyleClass = Css.createClass {
@@ -100,7 +98,6 @@ private val largeButtonStyleClass = Css.createClass {
     fontWeight = EFontWeight.SemiBold.cssValue
     borderWidth = "4px"
     borderStyle = "solid"
-    borderRadius = "5px"
 }
 
 

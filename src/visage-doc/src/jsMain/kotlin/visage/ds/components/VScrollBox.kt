@@ -26,7 +26,7 @@ class CVScrollBox(val height: String) : AComposite<CVScrollBox.Companion.State>(
     }
 
     private fun refreshThumbSize() {
-        val sb = document.getElementById(this.state.id) as HTMLDivElement ?: return
+        val sb = document.getElementById(this.state.id) as HTMLDivElement
         val sh = sb.scrollHeight
         val ch = sb.clientHeight
         val st = sb.scrollTop
@@ -40,8 +40,7 @@ class CVScrollBox(val height: String) : AComposite<CVScrollBox.Companion.State>(
             this.state.scrollVisible = true
         }
 
-        // TODO change to this.refresh() when NullPointerException bug fixed in visage
-        Visage.rerender()
+        this.refresh()
     }
 
     override fun Components.render(children: List<AComponent<*>>) {

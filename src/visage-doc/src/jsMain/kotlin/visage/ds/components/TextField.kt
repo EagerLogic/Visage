@@ -1,114 +1,197 @@
 package com.el.vds.components
 
-import visage.ds.colorpalette.Skin
+import kotlinx.browser.window
 import org.w3c.dom.HTMLInputElement
+import visage.ds.colorpalette.Skin
 import visage.core.AComponent
-import visage.core.APureComponent
 import visage.core.Components
-import visage.dom.Css
-import visage.dom.Listener
-import visage.dom.div
-import visage.dom.tag
-import visage.ds.components.ETextStyles
-import visage.ds.components.Text
+import visage.core.IdGenerator
+import visage.dom.*
 import visage.ds.forms.FieldModel
+import visage.ds.utils.EFontWeight
 
-class CTextField(val model: FieldModel<String>) : APureComponent() {
+class CTextField(val label: String, val model: FieldModel<String>) : AComponent<CTextField.Companion.State>() {
 
-    var label: String? = null
+    companion object {
+        class State {
+            var focused = false
+            val inputId = "tf-${IdGenerator.nextId}"
+        }
+    }
+
     var infoText: String? = null
     var disabled: Boolean = false
     var password: Boolean = false
     var onChange: Listener<String>? = null
 
+    override fun initState(): State {
+        return State()
+    }
+
+    override fun onComponentDidMount() {
+        window.setTimeout({
+            this.updateFocusedState()
+        }, 100)
+    }
+
+    private fun updateFocusedState() {
+        val inp = window.document.getElementById(this.state.inputId) as HTMLInputElement
+        val isFocused = window.document.activeElement === inp
+        if (this.state.focused != isFocused) {
+            this.state.focused = isFocused
+            this.refresh()
+        }
+    }
+
     override fun Components.render(children: List<AComponent<*>>) {
-        div {
-
-            if (this@CTextField.label != null) {
-                div {
-                    Text(this@CTextField.label!!, ETextStyles.FieldLabel)
-                }
-                div { style.apply { height = "2px" } }
+        var rootExtStyle = rootNormalStyle
+        var smallLabelExtStyle = normalSmallLabelStyle
+        if (this@CTextField.disabled) {
+            rootExtStyle = rootDisabledStyle
+            smallLabelExtStyle = disabledSmallLabelStyle
+        } else if (this@CTextField.state.focused) {
+            rootExtStyle = rootFocusedStyle
+            smallLabelExtStyle = focusedSmallLabelStyle
+            if (this@CTextField.model.error != null) {
+                smallLabelExtStyle = errorSmallLabelStyle
             }
+        } else if (this@CTextField.model.error != null) {
+            rootExtStyle = rootErrorStyle
+            smallLabelExtStyle = errorSmallLabelStyle
+        }
 
+        div {
+            attr.classes = "$rootStyle $rootExtStyle"
 
             div {
-                tag("input") {
-                    attr["type"] = if (this@CTextField.password) "password" else "text"
-                    attr.classes = baseInputStyle + " " + if (this@CTextField.disabled) {
-                        disabledInputStyle
-                    } else if (this@CTextField.model.error != null) {
-                        errorInputStyle
-                    } else {
-                        normalInputStyle
-                    }
-                    attr["value"] = this@CTextField.model.value
+                attr.classes = "$baseSmallLabelStyle $smallLabelExtStyle"
 
-                    events["input"] = {
-                        val newValue = (it.target as HTMLInputElement).value
-                        this@CTextField.model.value = newValue
-                        this@CTextField.onChange?.invoke(newValue)
+                text(this@CTextField.label)
+            }
+            div {
+                style.apply { width = "100%" }
+
+                tag("input") {
+                    attr.id = this@CTextField.state.inputId
+                    attr["type"] = if (this@CTextField.password) "password" else "text"
+                    attr["value"] = this@CTextField.model.value
+                    if (this@CTextField.disabled) {
+                        attr["disabled"] = "true"
+                    }
+                    attr.classes = inputStyle
+
+                    events["focus"] = {
+                        this@CTextField.updateFocusedState()
+                    }
+                    events["blur"] = {
+                        this@CTextField.updateFocusedState()
                     }
                 }
             }
+        }
 
-            if (this@CTextField.model.error != null) {
-                div { style.apply { height = "2px" } }
-                div {
-                    Text(this@CTextField.model.error!!, ETextStyles.FieldErrorText)
-                }
-            } else if (this@CTextField.infoText != null) {
-                div { style.apply { height = "2px" } }
-                div {
-                    Text(this@CTextField.infoText!!, ETextStyles.FieldInfoText)
-                }
+        if (this@CTextField.model.error != null) {
+            div {
+                attr.classes = "$infoTextBaseStyle $infoTextErrorStyle"
+
+                text(this@CTextField.model.error!!)
+            }
+        } else if (this@CTextField.infoText != null) {
+            div {
+                attr.classes = "$infoTextBaseStyle $infoTextNormalStyle"
+
+                text(this@CTextField.infoText!!)
             }
         }
     }
 
 }
 
-private val baseInputStyle = Css.createClass {
+private val rootStyle = Css.createClass {
+    position = "relative"
     width = "100%"
     padding = "8px"
-    borderWidth = "2px"
-    borderStyle = "solid"
-    fontSize = "${ETextStyles.FieldValue.textStyle.fontSize}px"
-    fontWeight = "${ETextStyles.FieldValue.textStyle.fontWeight}"
-    color = ETextStyles.FieldValue.textStyle.color
-    borderRadius = "4px"
-
 }
 
-private val normalInputStyle = Css.createClass {
-    backgroundColor = Skin.palette.fieldNormalBgColor;
-    borderColor = Skin.palette.fieldNormalBorderColor;
-    pseudo {
-        focus {
-            this["outline"] = "none"
-            borderColor = Skin.palette.fieldSelectedBorderColor
-        }
-    }
+private val rootNormalStyle = Css.createClass {
+    backgroundColor = Skin.palette.fieldNormalBgColor
+    borderBottomStyle = "solid"
+    borderBottomWidth = "2px"
+    borderBottomColor = Skin.palette.fieldNormalBorderColor
 }
 
-private val disabledInputStyle = Css.createClass {
-    backgroundColor = Skin.palette.fieldDisabledBgColor;
-    borderColor = Skin.palette.fieldDisabledBorderColor;
-    pseudo {
-        focus {
-            this["outline"] = "none"
-        }
-    }
+private val rootDisabledStyle = Css.createClass {
+    backgroundColor = Skin.palette.fieldDisabledBgColor
+    borderBottomStyle = "solid"
+    borderBottomWidth = "2px"
+    borderBottomColor = Skin.palette.fieldDisabledBorderColor
 }
 
-private val errorInputStyle = Css.createClass {
-    backgroundColor = Skin.palette.fieldErrorBgColor;
-    borderColor = Skin.palette.fieldErrorBorderColor;
-    pseudo {
-        focus {
-            this["outline"] = "none"
-        }
-    }
+private val rootFocusedStyle = Css.createClass {
+    backgroundColor = Skin.palette.fieldNormalBgColor
+    borderBottomStyle = "solid"
+    borderBottomWidth = "2px"
+    borderBottomColor = Skin.palette.fieldFocusedBorderColor
 }
 
-fun Components.TextField(model: FieldModel<String>, init: CTextField.() -> Unit = {  }) = this.registerComponent(CTextField(model), init)
+private val rootErrorStyle = Css.createClass {
+    backgroundColor = Skin.palette.fieldNormalBgColor
+    borderBottomStyle = "solid"
+    borderBottomWidth = "2px"
+    borderBottomColor = Skin.palette.fieldErrorBorderColor
+}
+
+private val baseSmallLabelStyle = Css.createClass {
+    fontSize = "12px"
+    fontWeight = EFontWeight.SemiBold.cssValue
+    width = "100%"
+    maxWidth = width
+    overflow = "hidden"
+    textOverflow = "ellipsis"
+}
+
+private val focusedSmallLabelStyle = Css.createClass {
+    color = Skin.palette.primaryColor
+}
+
+private val normalSmallLabelStyle = Css.createClass {
+    color = Skin.palette.textWeak
+}
+
+private val errorSmallLabelStyle = Css.createClass {
+    color = Skin.palette.fieldErrorBorderColor
+}
+
+private val disabledSmallLabelStyle = Css.createClass {
+    color = Skin.palette.textWeak
+}
+
+private val inputStyle = Css.createClass {
+    width = "100%"
+    backgroundColor = "transparent"
+    borderWidth = "0px"
+    padding = "2px 0px 0px 0px"
+    fontSize = "16px"
+    fontWeight = EFontWeight.Regular.cssValue
+    color = Skin.palette.textStrong
+}
+
+private val infoTextBaseStyle = Css.createClass {
+    width = "100%"
+    maxWidth = "100%"
+    fontSize = "12px"
+    fontWeight = EFontWeight.Medium.cssValue
+    padding = "4px 8px 0px 8px"
+}
+
+private val infoTextNormalStyle = Css.createClass {
+    color = Skin.palette.textMedium
+}
+
+private val infoTextErrorStyle = Css.createClass {
+    color = Skin.palette.errorColor
+}
+
+
+fun Components.TextField(label: String, model: FieldModel<String>, init: CTextField.() -> Unit = { }) =
+    this.registerComponent(CTextField(label, model), init)

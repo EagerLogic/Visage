@@ -257,11 +257,11 @@ class CGroupMenuItem(
 
             div {
                 attr.classes = groupMenuItemRootStyle
-                events.onClick = {
+                events.onClick = onClick@ {
                     children.forEach {
                         if (it is CChildMenuItem) {
                             Navigation.pushLocation(it.href)
-                            return@forEach
+                            return@onClick
                         }
                     }
                 }
@@ -270,7 +270,7 @@ class CGroupMenuItem(
                     style.apply {
                         width = "48px"
                     }
-                    Icon(this@CGroupMenuItem.icon, Skin.palette.menuItemNormalColor, 24)
+                    Icon(this@CGroupMenuItem.icon, Skin.palette.lightTextWeak, 24)
                 }
 
                 div {
@@ -405,7 +405,7 @@ class CChildMenuItem(
 fun CGroupMenuItem.menuItem(title: String, href: String) = this.registerComponent(CChildMenuItem(title, href), {})
 
 private val childMenuItemRootStyle = Css.createClass {
-    padding = "8px 16px 8px 64px"
+    padding = "4px 16px 4px 64px"
     cursor = "pointer"
     display = "flex"
     alignItems = "center"

@@ -1,11 +1,10 @@
-package visagedoc.scenes.components.buttonscene
+package visagedoc.scenes.ds.components
 
 import kotlinx.browser.window
 import visage.core.AComponent
 import visage.core.APureComponent
 import visage.core.Components
 import visage.dom.div
-import visage.dom.tag
 import visage.dom.text
 import visage.ds.components.*
 import visagedoc.components.*

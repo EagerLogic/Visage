@@ -32,8 +32,9 @@ fun CDocPage.title(title: String) = this.registerComponent(CDocTitle(title), {})
 class CDocParagraph() : APureComposite() {
     override fun Components.render(children: List<AComponent<*>>) {
         tag("p") {
+            style.textAlign = "justify"
             children.forEach {
-                this.addChild(it)
+                + it
             }
         }
     }

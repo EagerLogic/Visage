@@ -35,14 +35,14 @@ interface IColorPalette {
     val lightTextWeak: String
 
 
-    val fieldNormalBorderColor: String
-    val fieldDisabledBorderColor: String
-    val fieldErrorBorderColor: String
-    val fieldSelectedBorderColor: String
-
     val fieldNormalBgColor: String
     val fieldDisabledBgColor: String
-    val fieldErrorBgColor: String
+
+    val fieldNormalBorderColor: String
+    val fieldFocusedBorderColor: String
+    val fieldErrorBorderColor: String
+    val fieldDisabledBorderColor: String
+
 
     val modalHeaderBackground: String
 
@@ -58,7 +58,7 @@ interface IColorPalette {
 }
 
 class DefaultLightPalette : IColorPalette {
-    override val bgColor: String = "#f8f8f8"
+    override val bgColor: String = "#ffffff"
 
     override val primaryColor: String = "#4FC0E8"
     override val primaryLightColor: String = "#66D4F1"
@@ -91,11 +91,10 @@ class DefaultLightPalette : IColorPalette {
     override val fieldNormalBorderColor: String = "#ccc"
     override val fieldDisabledBorderColor: String = "#888"
     override val fieldErrorBorderColor: String = errorDarkColor
-    override val fieldSelectedBorderColor: String = primaryColor
+    override val fieldFocusedBorderColor: String = primaryColor
 
-    override val fieldNormalBgColor: String = "#fff"
+    override val fieldNormalBgColor: String = "#f4f4f4"
     override val fieldDisabledBgColor: String = "#ccc"
-    override val fieldErrorBgColor: String = "#fff"
 
     override val modalHeaderBackground: String = primaryDarkColor
 
