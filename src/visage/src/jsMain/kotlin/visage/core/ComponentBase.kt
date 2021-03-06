@@ -17,6 +17,7 @@ interface IDomNode {
 interface IChildScope {
     fun addChild(child: AComponent<*>)
     fun <S : Any, C : AComponent<S>> registerComponent(child: C, init: C.() -> Unit)
+    fun registerFunctionalComponent(init: CFunctionalComponent.() -> Unit, renderer: Components.(children: List<AComponent<*>>) -> Unit, )
 }
 
 interface Components : IChildScope {
@@ -35,12 +36,16 @@ internal class ChildProxy(private val childScope: IChildScope) : Components {
         childScope.registerComponent(child, init)
     }
 
+    override fun registerFunctionalComponent(init: CFunctionalComponent.() -> Unit, renderer: Components.(children: List<AComponent<*>>) -> Unit, ) {
+        this.registerComponent(CFunctionalComponent(renderer), init)
+    }
+
     override fun AComponent<*>.unaryPlus() {
-        this@ChildProxy.addChild(this)
+        this@ChildProxy.childScope.addChild(this)
     }
 
     override fun String.unaryPlus() {
-        this@ChildProxy.addChild(MTextNode(this))
+        this@ChildProxy.childScope.addChild(MTextNode(this))
     }
 
 }
@@ -74,6 +79,10 @@ abstract class AComponent<GState : Any> : IChildScope {
             this@AComponent.registerComponent(child, init)
         }
 
+        override fun registerFunctionalComponent(init: CFunctionalComponent.() -> Unit, renderer: Components.(children: List<AComponent<*>>) -> Unit, ) {
+            this.registerComponent(CFunctionalComponent(renderer), init)
+        }
+
         override fun AComponent<*>.unaryPlus() {
             this@AComponent.addChild(this)
         }
@@ -97,6 +106,10 @@ abstract class AComponent<GState : Any> : IChildScope {
     final override fun <S : Any, C : AComponent<S>> registerComponent(child: C, init: C.() -> Unit) {
         child.init()
         this._children_internal.add(child)
+    }
+
+    override fun registerFunctionalComponent(init: CFunctionalComponent.() -> Unit, renderer: Components.(children: List<AComponent<*>>) -> Unit, ) {
+        this.registerComponent(CFunctionalComponent(renderer), init)
     }
 
     fun refresh() {
@@ -186,4 +199,10 @@ abstract class APureComposite : AComposite<Unit>() {
     }
 }
 
+class CFunctionalComponent(private val renderer: Components.(children: List<AComponent<*>>) -> Unit) : APureComposite() {
+    override fun Components.render(children: List<AComponent<*>>) {
+        this@CFunctionalComponent.renderer.invoke(this, children)
+    }
+
+}
 
