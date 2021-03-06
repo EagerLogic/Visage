@@ -16,9 +16,9 @@ plugins {
 apply(plugin = "com.google.cloud.tools.appengine")
 
 group = "io.github.eagerlogic"
-version = "0.2.10"
+version = "0.2.20"
 
-val visageVersion = "0.2.11"
+val visageVersion = "0.2.20"
 
 repositories {
     mavenLocal()
