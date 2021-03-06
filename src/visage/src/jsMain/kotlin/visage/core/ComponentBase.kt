@@ -15,6 +15,7 @@ interface IDomNode {
 
 @ComponentMarker
 interface IChildScope {
+    @Deprecated("The addChild method is deprecated and will be removed in future releases. Use the unaryPlus operator instead", ReplaceWith("+ someExternalComponent"))
     fun addChild(child: AComponent<*>)
     fun <S : Any, C : AComponent<S>> registerComponent(child: C, init: C.() -> Unit)
     fun registerFunctionalComponent(init: CFunctionalComponent.() -> Unit, renderer: Components.(children: List<AComponent<*>>) -> Unit, )
