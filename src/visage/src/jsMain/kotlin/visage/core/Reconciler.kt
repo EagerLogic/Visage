@@ -46,7 +46,7 @@ internal class Reconciler private constructor() {
                 } else {
                     val oldComp = oldComponents[i]
                     var isUpdate = false
-                    if (newComp.type == oldComp.type) {
+                    if (newComp._type == oldComp._type) {
                         var state: Any? = oldComp._read_state_internal()
                         state = newComp.onRestoreState(state!!)
                         if (state != null) {

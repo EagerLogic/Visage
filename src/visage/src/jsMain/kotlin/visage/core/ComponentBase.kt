@@ -60,9 +60,9 @@ abstract class AComponent<GState : Any> : IChildScope {
     internal var _dom_node: Node? = null
     internal var _invalid: Boolean = true
 
-    val typeClass: String = this::class.simpleName ?: "Unknown"
+    val _typeClass: String = this::class.simpleName ?: "Unknown"
 
-    internal val type: String
+    internal val _type: String
         get() {
             if (!this::state.isInitialized) {
                 this.state = this.initState()

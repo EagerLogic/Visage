@@ -1,26 +1,161 @@
 package visage.dom
 
-import visage.core.Components
-import org.w3c.dom.DragEvent
-import org.w3c.dom.events.MouseEvent
-import org.w3c.dom.events.WheelEvent
+import kotlinx.browser.document
+import org.w3c.dom.HTMLElement
+import org.w3c.dom.Node
+import org.w3c.dom.Text
+import org.w3c.dom.events.Event
+import visage.core.*
+import kotlin.reflect.KProperty
 
-class MTag(name: String) :
-    ATag<TagAttributes, TagStyles, TagEvents>(name, TagAttributes(), TagStyles(), TagEvents()) {
+open class CTag(private val name: String) : APureComposite(), IDomNode {
+
+    val attr = TagAttributes()
+    val style = TagStyles()
+    val events = TagEvents()
+
+    var id: String? by attr.delegate("id")
+    var classes: String? by attr.delegate("class")
+
+    final override fun Components.render(children: List<AComponent<*>>) {
+        for (child in children) {
+            this.addChild(child)
+        }
+    }
+
+    final override fun createNode(): Node {
+        val res = document.createElement(name).unsafeCast<HTMLElement>()
+        attr.applyProperties(res)
+        style.applyProperties(res)
+        events.applyProperties(res)
+        return res
+    }
+
+    final override fun updateNode(node: Node, oldComponent: AComponent<*>) {
+        val element = node.unsafeCast<HTMLElement>()
+        attr.updateProperties(element, (oldComponent.unsafeCast<CTag>()).attr)
+        style.updateProperties(element, (oldComponent.unsafeCast<CTag>()).style)
+        events.updateProperties(element, (oldComponent.unsafeCast<CTag>()).events)
+    }
 
 }
 
-fun Components.tag(name: String, init: MTag.() -> Unit = {}) =
-    this.registerComponent(MTag(name), init)
+fun Components.tag(name: String, init: CTag.() -> Unit = {}) =
+    this.registerComponent(CTag(name), init)
 
-open class TagAttributes() : BaseTagAttributes() {
+abstract class AMergeableProperties<GType: Any> : MutableIterable<MutableMap.MutableEntry<String, GType>> {
 
-    var id: String? by delegate("id")
-    var classes: String? by delegate("class")
+    private val properties: MutableMap<String, GType> = mutableMapOf()
+
+    operator fun get(name: String): GType? {
+        return this.properties[name.toLowerCase()]
+    }
+
+    operator fun set(name: String, value: GType?) {
+        if (value == null) {
+            this.properties.remove(name.toLowerCase())
+        } else {
+            this.properties[name.toLowerCase()] = value
+        }
+    }
+
+    override fun iterator(): MutableIterator<MutableMap.MutableEntry<String, GType>> {
+        return this.properties.iterator()
+    }
+
+    fun applyProperties(element: HTMLElement) {
+        for ((name, value) in properties) {
+            applyProperty(name, value, element)
+        }
+    }
+
+    fun updateProperties(element: HTMLElement, oldProps: AMergeableProperties<GType>) {
+        // check what to delete or update
+        for ((name, value) in oldProps.properties) {
+            if (this.properties[name] == null) {
+                // delete
+                removeProperty(name, value, element)
+            } else {
+                // update if changed
+                if (!this.isPropertiesEquals(value, this.properties[name]!!)) {
+                    // update because changed
+                    removeProperty(name, value, element)
+                    applyProperty(name, this.properties[name]!!, element)
+                }
+            }
+        }
+
+        // check what is new
+        for ((name, value) in this.properties) {
+            if (oldProps[name] == null) {
+                applyProperty(name, value, element)
+            }
+        }
+    }
+
+    protected abstract fun isPropertiesEquals(prop1: GType, prop2: GType): Boolean
+    protected abstract fun applyProperty(name: String, value: GType, element: HTMLElement)
+    protected abstract fun removeProperty(name: String, value: GType, element: HTMLElement)
+
+    fun delegate(name: String): PropertiesDelegate<GType> {
+        return PropertiesDelegate(name, this)
+    }
+
+    class PropertiesDelegate<GType: Any>(val name: String, val properties: AMergeableProperties<GType>) {
+        operator fun getValue(thisRef: AMergeableProperties<GType>, property: KProperty<*>): GType? {
+            return properties[name].unsafeCast<GType?>()
+        }
+
+        operator fun setValue(thisRef: AMergeableProperties<GType>, property: KProperty<*>, value: GType?) {
+            properties[name] = value.unsafeCast<GType?>()
+        }
+
+        operator fun getValue(tag: CTag, property: KProperty<*>): GType? {
+            return properties[name].unsafeCast<GType?>()
+        }
+
+        operator fun setValue(tag: CTag, property: KProperty<*>, value: GType?) {
+            properties[name] = value.unsafeCast<GType?>()
+        }
+    }
 
 }
 
-open class TagStyles : BaseTagStyles() {
+class TagAttributes: AMergeableProperties<String>() {
+
+    override fun isPropertiesEquals(prop1: String, prop2: String): Boolean {
+        return prop1 == prop2
+    }
+
+    override fun applyProperty(name: String, value: String, element: HTMLElement) {
+        element.setAttribute(name, value)
+    }
+
+    override fun removeProperty(name: String, value: String, element: HTMLElement) {
+        element.removeAttribute(name)
+    }
+
+}
+
+typealias Listener<GEvent> = (e: GEvent) -> Unit
+
+class TagEvents: AMergeableProperties<Listener<Event>>() {
+
+    override fun isPropertiesEquals(prop1: Listener<Event>, prop2: Listener<Event>): Boolean {
+        return false
+    }
+
+    override fun applyProperty(name: String, value: Listener<Event>, element: HTMLElement) {
+        element.addEventListener(name, value)
+    }
+
+    override fun removeProperty(name: String, value: Listener<Event>, element: HTMLElement) {
+        element.removeEventListener(name, value)
+    }
+
+}
+
+open class TagStyles: AMergeableProperties<String>() {
 
     //<editor-fold desc="A">
     var alignContent: String? by delegate("align-content")
@@ -451,34 +586,74 @@ open class TagStyles : BaseTagStyles() {
     var zIndex: String? by delegate("z-index")
     //</editor-fold>
 
-}
+    override fun isPropertiesEquals(prop1: String, prop2: String): Boolean {
+        return prop1 == prop2
+    }
 
-open class TagEvents : BaseTagEvents() {
+    override fun applyProperty(name: String, value: String, element: HTMLElement) {
+        element.style.setProperty(name, value)
+    }
 
-    // mouse events
-    var onClick: Listener<MouseEvent>? by delegate("click")
-    var onMouseEnter: Listener<MouseEvent>? by delegate("mouseenter")
-    var onMouseLeave: Listener<MouseEvent>? by delegate("mouseleave")
-    var onMouseDown: Listener<MouseEvent>? by delegate("mousedown")
-    var onMouseUp: Listener<MouseEvent>? by delegate("mouseup")
-    var onMouseOver: Listener<MouseEvent>? by delegate("mouseover")
-    var onMouseOut: Listener<MouseEvent>? by delegate("mouseout")
-    var onMouseMove: Listener<MouseEvent>? by delegate("mousemove")
+    override fun removeProperty(name: String, value: String, element: HTMLElement) {
+        element.style.removeProperty(name)
+    }
 
-    // touch event
-
-
-    // drag events
-    var onDrag: Listener<DragEvent>? by delegate("drag")
-    var onDragEnd: Listener<DragEvent>? by delegate("dragend")
-    var onDragEnter: Listener<DragEvent>? by delegate("dragenter")
-    var onDragExit: Listener<DragEvent>? by delegate("dragexit")
-    var onDragLeave: Listener<DragEvent>? by delegate("dragleave")
-    var onDragOver: Listener<DragEvent>? by delegate("dragover")
-    var onDragStart: Listener<DragEvent>? by delegate("dragstart")
-    var onDrop: Listener<DragEvent>? by delegate("drop")
-
-    // wheel events
-    var onWheel: Listener<WheelEvent>? by delegate("wheel")
+    fun merge(other: TagStyles) {
+        for ((name, value) in other) {
+            this[name] = value
+        }
+    }
 
 }
+
+
+class MTextNode(private val text: String) : APureComponent(), IDomNode {
+
+    override fun createNode(): Node {
+        return document.createTextNode(text)
+    }
+
+    override fun updateNode(node: Node, oldComponent: AComponent<*>) {
+        (node.unsafeCast<Text>()).data = text
+    }
+
+    override fun Components.render(children: List<AComponent<*>>) {
+        // nothing to do here
+    }
+
+}
+
+@Deprecated("The text component is deprecated and will be removed in feature Visage release. Use the unary plus operatore following by any string.", ReplaceWith("+ \"Some text to add as a node\""))
+fun Components.text(text: String) = this.registerComponent(MTextNode(text), {})
+
+
+
+//open class TagEvents : BaseTagEvents() {
+//
+//    // mouse events
+//    var onClick: Listener<MouseEvent>? by delegate("click")
+//    var onMouseEnter: Listener<MouseEvent>? by delegate("mouseenter")
+//    var onMouseLeave: Listener<MouseEvent>? by delegate("mouseleave")
+//    var onMouseDown: Listener<MouseEvent>? by delegate("mousedown")
+//    var onMouseUp: Listener<MouseEvent>? by delegate("mouseup")
+//    var onMouseOver: Listener<MouseEvent>? by delegate("mouseover")
+//    var onMouseOut: Listener<MouseEvent>? by delegate("mouseout")
+//    var onMouseMove: Listener<MouseEvent>? by delegate("mousemove")
+//
+//    // touch event
+//
+//
+//    // drag events
+//    var onDrag: Listener<DragEvent>? by delegate("drag")
+//    var onDragEnd: Listener<DragEvent>? by delegate("dragend")
+//    var onDragEnter: Listener<DragEvent>? by delegate("dragenter")
+//    var onDragExit: Listener<DragEvent>? by delegate("dragexit")
+//    var onDragLeave: Listener<DragEvent>? by delegate("dragleave")
+//    var onDragOver: Listener<DragEvent>? by delegate("dragover")
+//    var onDragStart: Listener<DragEvent>? by delegate("dragstart")
+//    var onDrop: Listener<DragEvent>? by delegate("drop")
+//
+//    // wheel events
+//    var onWheel: Listener<WheelEvent>? by delegate("wheel")
+//
+//}
