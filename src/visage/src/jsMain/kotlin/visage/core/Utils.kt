@@ -1,6 +1,6 @@
 package visage.core
 
-import kotlin.browser.window
+import kotlinx.browser.window
 
 class RunOnce(private val block: () -> Unit) {
 
