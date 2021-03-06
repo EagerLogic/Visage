@@ -1,6 +1,7 @@
 package visage.core
 
 import org.w3c.dom.Node
+import visage.dom.MTextNode
 
 @DslMarker
 annotation class ComponentMarker
@@ -18,16 +19,28 @@ interface IChildScope {
     fun <S : Any, C : AComponent<S>> registerComponent(child: C, init: C.() -> Unit)
 }
 
-interface Components : IChildScope
+interface Components : IChildScope {
+
+
+    operator fun AComponent<*>.unaryPlus()
+    operator fun String.unaryPlus()
+}
 
 internal class ChildProxy(private val childScope: IChildScope) : Components {
-
     override fun addChild(child: AComponent<*>) {
         childScope.addChild(child)
     }
 
     override fun <S : Any, C : AComponent<S>> registerComponent(child: C, init: C.() -> Unit) {
         childScope.registerComponent(child, init)
+    }
+
+    override fun AComponent<*>.unaryPlus() {
+        this@ChildProxy.addChild(this)
+    }
+
+    override fun String.unaryPlus() {
+        this@ChildProxy.addChild(MTextNode(this))
     }
 
 }
@@ -59,6 +72,14 @@ abstract class AComponent<GState : Any> : IChildScope {
 
         override fun <S : Any, C : AComponent<S>> registerComponent(child: C, init: C.() -> Unit) {
             this@AComponent.registerComponent(child, init)
+        }
+
+        override fun AComponent<*>.unaryPlus() {
+            this@AComponent.addChild(this)
+        }
+
+        override fun String.unaryPlus() {
+            this@AComponent.addChild(MTextNode(this))
         }
 
     }
@@ -148,6 +169,14 @@ abstract class APureComponent : AComponent<Unit>() {
 }
 
 abstract class AComposite<GState : Any>() : AComponent<GState>(), Components {
+
+    override fun AComponent<*>.unaryPlus() {
+        this@AComposite.addChild(this)
+    }
+
+    override fun String.unaryPlus() {
+        this@AComposite.addChild(MTextNode(this))
+    }
 
 }
 
