@@ -1,6 +1,10 @@
 package visage.core
 
+import kotlinx.browser.window
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLLinkElement
+import org.w3c.dom.get
+import visage.dom.Css
 import kotlin.js.Date
 
 internal class MigoRouteComponent(val renderMethod: Components.() -> Unit) : APureComposite() {
@@ -45,7 +49,37 @@ class Visage private constructor() {
         fun init(rootElement: HTMLElement, onRender: Components.() -> Unit) {
             Visage.rootElement = rootElement
             Visage.onRender = onRender
+            this.setUpHtml()
+        }
 
+        private fun setUpHtml() {
+            // inject required styles
+            Css.createBlock("*") {
+                fontFamily = "'Quicksand', sans-serif"
+                boxSizing = "border-box"
+            }
+            Css.createBlock(".vsb::-webkit-scrollbar") {
+                width = "0px"
+            }
+            Css.createBlock("html, body") {
+                width = "100%"
+                height = "100%"
+                padding = "0px"
+                margin = "0px"
+            }
+
+            // inject required fonts
+            val head = window.document.getElementsByTagName("head")!![0]!!
+
+            val materialIcons = window.document.createElement("link") as HTMLLinkElement
+            materialIcons.href = "https://fonts.googleapis.com/icon?family=Material+Icons"
+            materialIcons.rel = "stylesheet"
+            head.appendChild(materialIcons)
+
+            val quickSand = window.document.createElement("link") as HTMLLinkElement
+            quickSand.href = "https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+            quickSand.rel = "stylesheet"
+            head.appendChild(quickSand)
         }
 
         fun render() {
@@ -54,7 +88,7 @@ class Visage private constructor() {
 
         fun rerender() {
             if (tree != null) {
-                tree!!.refresh()
+                tree!!._invalid = true
             }
             render()
         }
