@@ -1,10 +1,13 @@
 package visage.dom
 
 import kotlinx.browser.document
+import org.w3c.dom.DragEvent
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.Node
 import org.w3c.dom.Text
 import org.w3c.dom.events.Event
+import org.w3c.dom.events.MouseEvent
+import org.w3c.dom.events.WheelEvent
 import visage.core.*
 import kotlin.reflect.KProperty
 
@@ -102,19 +105,19 @@ abstract class AMergeableProperties<GType: Any> : MutableIterable<MutableMap.Mut
     }
 
     class PropertiesDelegate<GType: Any>(val name: String, val properties: AMergeableProperties<GType>) {
-        operator fun getValue(thisRef: AMergeableProperties<GType>, property: KProperty<*>): GType? {
-            return properties[name].unsafeCast<GType?>()
+        operator fun <C: Any> getValue(thisRef: AMergeableProperties<GType>, property: KProperty<*>): C? {
+            return properties[name].unsafeCast<C?>()
         }
 
-        operator fun setValue(thisRef: AMergeableProperties<GType>, property: KProperty<*>, value: GType?) {
+        operator fun <C: Any> setValue(thisRef: AMergeableProperties<GType>, property: KProperty<*>, value: C?) {
             properties[name] = value.unsafeCast<GType?>()
         }
 
-        operator fun getValue(tag: CTag, property: KProperty<*>): GType? {
-            return properties[name].unsafeCast<GType?>()
+        operator fun <C: Any> getValue(tag: CTag, property: KProperty<*>): C? {
+            return properties[name].unsafeCast<C?>()
         }
 
-        operator fun setValue(tag: CTag, property: KProperty<*>, value: GType?) {
+        operator fun <C: Any> setValue(tag: CTag, property: KProperty<*>, value: C?) {
             properties[name] = value.unsafeCast<GType?>()
         }
     }
@@ -140,6 +143,32 @@ class TagAttributes: AMergeableProperties<String>() {
 typealias Listener<GEvent> = (e: GEvent) -> Unit
 
 class TagEvents: AMergeableProperties<Listener<Event>>() {
+
+    // mouse events
+    var onClick: Listener<MouseEvent>? by delegate("click")
+    var onMouseEnter: Listener<MouseEvent>? by delegate("mouseenter")
+    var onMouseLeave: Listener<MouseEvent>? by delegate("mouseleave")
+    var onMouseDown: Listener<MouseEvent>? by delegate("mousedown")
+    var onMouseUp: Listener<MouseEvent>? by delegate("mouseup")
+    var onMouseOver: Listener<MouseEvent>? by delegate("mouseover")
+    var onMouseOut: Listener<MouseEvent>? by delegate("mouseout")
+    var onMouseMove: Listener<MouseEvent>? by delegate("mousemove")
+
+    // touch event
+
+
+    // drag events
+    var onDrag: Listener<DragEvent>? by delegate("drag")
+    var onDragEnd: Listener<DragEvent>? by delegate("dragend")
+    var onDragEnter: Listener<DragEvent>? by delegate("dragenter")
+    var onDragExit: Listener<DragEvent>? by delegate("dragexit")
+    var onDragLeave: Listener<DragEvent>? by delegate("dragleave")
+    var onDragOver: Listener<DragEvent>? by delegate("dragover")
+    var onDragStart: Listener<DragEvent>? by delegate("dragstart")
+    var onDrop: Listener<DragEvent>? by delegate("drop")
+
+    // wheel events
+    var onWheel: Listener<WheelEvent>? by delegate("wheel")
 
     override fun isPropertiesEquals(prop1: Listener<Event>, prop2: Listener<Event>): Boolean {
         return false
