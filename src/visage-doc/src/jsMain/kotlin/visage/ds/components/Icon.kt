@@ -5,7 +5,6 @@ import visage.core.APureComponent
 import visage.core.Components
 import visage.dom.Css
 import visage.dom.div
-import visage.dom.text
 import visage.ds.colorpalette.Skin
 
 class CIcon(val icon: String, val color: String, val size: Int) : APureComponent() {
@@ -18,7 +17,7 @@ class CIcon(val icon: String, val color: String, val size: Int) : APureComponent
             style.fontSize = "${this@CIcon.size}px"
             style.color = this@CIcon.color
 
-            text(this@CIcon.icon)
+            +this@CIcon.icon
         }
     }
 

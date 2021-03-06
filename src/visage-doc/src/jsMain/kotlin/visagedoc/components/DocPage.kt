@@ -4,13 +4,25 @@ import visage.core.*
 import visage.dom.Css
 import visage.dom.div
 import visage.dom.tag
-import visage.dom.text
 import visage.ds.components.*
 
 class CDocPage : APureComponent() {
     override fun Components.render(children: List<AComponent<*>>) {
-        children.forEach {
-            this.addChild(it)
+        div {
+            style.apply {
+                width = "100%"
+                display = "flex"
+                justifyContent = "center"
+            }
+
+            div {
+                style.width = "100%"
+                style.maxWidth = "100%"
+
+                children.forEach {
+                    +it
+                }
+            }
         }
     }
 }
@@ -20,7 +32,7 @@ fun Components.DocPage(init: CDocPage.() -> Unit) = this.registerComponent(CDocP
 class CDocTitle(val title: String) : APureComponent() {
     override fun Components.render(children: List<AComponent<*>>) {
         tag("h2") {
-            text(this@CDocTitle.title)
+            +this@CDocTitle.title
         }
     }
 
@@ -32,7 +44,7 @@ fun CDocPage.p(init: CFunctionalComponent.() -> Unit) = this.registerFunctionalC
     tag("p") {
         style.textAlign = "justify"
         it.forEach {
-            + it
+            +it
         }
     }
 }
@@ -41,18 +53,20 @@ fun CDocPage.codeBlock(code: String) = this.registerFunctionalComponent({}) {
     div {
         classes = codeBlockStyle
 
-        + code
+        +code
     }
 }
 
 private val codeBlockStyle = Css.createClass {
     width = "100%"
-    padding = "8px"
-    backgroundColor = "#f2f2f2"
-    color = "#333"
+    padding = "16px"
+    backgroundColor = "#444548"
+    color = "#fda"
     whiteSpace = "pre"
     fontSize = "14px"
     fontFamily = "monospace, monospace"
+    overflow = "auto"
+    borderRadius = "16px"
 }
 
 class CDocProperties() : APureComponent() {
@@ -65,28 +79,28 @@ class CDocProperties() : APureComponent() {
 
     override fun Components.render(children: List<AComponent<*>>) {
         tag("h2") {
-            text("Properties")
+            +"Properties"
         }
 
         tag("p") {
             Table {
                 head {
                     cell {
-                        text("Name")
+                        +"Name"
                     }
                     cell {
-                        text("Description")
+                        +"Description"
                     }
                     cell {
-                        text("Default value")
+                        +"Default value"
                     }
                 }
                 body {
                     this@CDocProperties.props.forEach {
                         row {
-                            cell { text(it.name) }
-                            cell { text(it.desc) }
-                            cell { text(it.default) }
+                            cell { +it.name }
+                            cell { +it.desc }
+                            cell { +it.default }
                         }
                     }
                 }

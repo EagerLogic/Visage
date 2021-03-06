@@ -4,7 +4,6 @@ import visage.core.*
 import visage.dom.Css
 import visage.dom.div
 import visage.dom.tag
-import visage.dom.text
 import visage.ds.colorpalette.Skin
 import visage.ds.utils.EFontWeight
 
@@ -43,7 +42,7 @@ class CBasePageLayout : APureComposite() {
 
                     if (it is CMenu) {
                         menuFound = true
-                        this.addChild(it)
+                        +it
                     }
                 }
             }
@@ -53,7 +52,7 @@ class CBasePageLayout : APureComposite() {
 
                 children.forEach {
                     if (!(it is CMenu)){
-                        this.addChild(it)
+                        +it
                     }
                 }
             }
@@ -140,7 +139,7 @@ class CMenu : APureComponent() {
                         if (it is CMenuItemBlock) {
                             if (!it.isBottom) {
                                 isTopItemFound = true
-                                this.addChild(it)
+                                +it
                             }
                         }
                     }
@@ -162,7 +161,7 @@ class CMenu : APureComponent() {
                         if (it.isBottom) {
                             isBottomItemFound = true
                             div {style.apply { width = "100%"; height = "1px"; backgroundColor = Skin.palette.menuSeparatorColor }}
-                            this.addChild(it)
+                            +it
                         }
                     }
                 }
@@ -224,7 +223,7 @@ class CMenuItemBlock(val isBottom: Boolean) : APureComponent() {
             classes = menuItemBlockRootStyle
 
             children.forEach {
-                this.addChild(it)
+                +it
             }
         }
     }
@@ -276,7 +275,7 @@ class CGroupMenuItem(
                 div {
                     classes = "$groupMenuItemTitleBaseStyle $groupMenuItemTitleUnselectedStyle"
 
-                    text(this@CGroupMenuItem.title)
+                    +this@CGroupMenuItem.title
                 }
             }
 
@@ -284,7 +283,7 @@ class CGroupMenuItem(
 
             if (isSelected) {
                 children.forEach {
-                    this.addChild(it)
+                    +it
                 }
             }
         }
@@ -296,7 +295,7 @@ fun CMenuItemBlock.groupMenuItem(title: String, icon: String, path: String, init
         this.registerComponent(CGroupMenuItem(title, icon, path), init)
 
 private val groupMenuItemRootStyle = Css.createClass {
-    padding = "8px 16px 8px 16px"
+    padding = "4px 16px 4px 16px"
     cursor = "pointer"
     display = "flex"
     alignItems = "center"
@@ -338,7 +337,7 @@ class CLeafMenuItem(val title: String, val icon: String, val href: String) : APu
             div {
                 classes = "$leafMenuItemTitleBaseStyle ${if (isSelected) leafMenuItemTitleSelectedStyle else leafMenuItemTitleUnselectedStyle}"
 
-                text(this@CLeafMenuItem.title)
+                +this@CLeafMenuItem.title
             }
         }
     }
@@ -349,7 +348,7 @@ fun CMenuItemBlock.menuItem(title: String, icon: String, href: String) =
         this.registerComponent(CLeafMenuItem(title, icon, href), { })
 
 private val leafMenuItemRootStyle = Css.createClass {
-    padding = "8px 16px 8px 16px"
+    padding = "4px 16px 4px 16px"
     cursor = "pointer"
     display = "flex"
     alignItems = "center"
@@ -395,7 +394,7 @@ class CChildMenuItem(
             div {
                 classes = "$childMenuItemTitleBaseStyle ${if (isSelected) childMenuItemTitleSelectedStyle else childMenuItemTitleUnselectedStyle}"
 
-                text(this@CChildMenuItem.title)
+                +this@CChildMenuItem.title
             }
         }
     }
@@ -439,7 +438,7 @@ class CGroup(val title: String) : APureComponent() {
         div {
             classes = groupStyle
 
-            text(this@CGroup.title)
+            +this@CGroup.title
         }
     }
 

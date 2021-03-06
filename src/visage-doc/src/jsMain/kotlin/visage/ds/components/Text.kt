@@ -1,13 +1,12 @@
 package visage.ds.components
 
-import visage.ds.colorpalette.Skin
-import visage.ds.utils.EFontWeight
-import visage.ds.utils.ETextAlign
 import visage.core.AComponent
 import visage.core.APureComponent
 import visage.core.Components
 import visage.dom.div
-import visage.dom.text
+import visage.ds.colorpalette.Skin
+import visage.ds.utils.EFontWeight
+import visage.ds.utils.ETextAlign
 
 class TextStyle(
     val fontSize: Int,
@@ -96,7 +95,7 @@ class CText internal constructor(val text: String, val style: TextStyle) : APure
                 }
             }
 
-            text(this@CText.text)
+            +this@CText.text
 
         }
     }

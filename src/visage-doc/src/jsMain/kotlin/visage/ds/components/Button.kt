@@ -1,13 +1,12 @@
 package visage.ds.components
 
-import visage.ds.colorpalette.Skin
-import visage.ds.utils.EFontWeight
 import visage.core.AComponent
 import visage.core.APureComponent
 import visage.core.Components
 import visage.dom.Css
 import visage.dom.div
-import visage.dom.text
+import visage.ds.colorpalette.Skin
+import visage.ds.utils.EFontWeight
 
 class CButton(var text: String) : APureComponent() {
 
@@ -27,7 +26,7 @@ class CButton(var text: String) : APureComponent() {
                 events.onClick = { this@CButton.onClick?.invoke() }
             }
 
-            text(this@CButton.text)
+            +this@CButton.text
         }
     }
 

@@ -45,7 +45,7 @@ class CBasePageContent(
                     classes = contentStyle
 
                     children.forEach {
-                        this.addChild(it)
+                        +it
                     }
                 }
             }

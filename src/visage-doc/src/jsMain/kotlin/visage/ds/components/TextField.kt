@@ -66,7 +66,7 @@ class CTextField(val label: String, val model: FieldModel<String>) : AComponent<
             div {
                 classes = "$baseSmallLabelStyle $smallLabelExtStyle"
 
-                text(this@CTextField.label)
+                +this@CTextField.label
             }
             div {
                 style.apply { width = "100%" }
@@ -94,13 +94,13 @@ class CTextField(val label: String, val model: FieldModel<String>) : AComponent<
             div {
                 classes = "$infoTextBaseStyle $infoTextErrorStyle"
 
-                text(this@CTextField.model.error!!)
+                +this@CTextField.model.error!!
             }
         } else if (this@CTextField.infoText != null) {
             div {
                 classes = "$infoTextBaseStyle $infoTextNormalStyle"
 
-                text(this@CTextField.infoText!!)
+                +this@CTextField.infoText!!
             }
         }
     }

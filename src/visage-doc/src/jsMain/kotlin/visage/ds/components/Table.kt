@@ -1,12 +1,12 @@
 package visage.ds.components
 
-import visage.ds.utils.EHAlign
-import visage.ds.utils.EVAlign
 import visage.core.AComponent
 import visage.core.APureComponent
 import visage.core.APureComposite
 import visage.core.Components
 import visage.dom.tag
+import visage.ds.utils.EHAlign
+import visage.ds.utils.EVAlign
 
 class CTable : APureComponent() {
 
@@ -16,7 +16,7 @@ class CTable : APureComponent() {
             style["border-collapse"] = "collapse"
 
             children.forEach {
-                this.addChild(it)
+                +it
             }
         }
     }
@@ -32,7 +32,7 @@ class CTableHead : APureComposite() {
                 style["border-bottom"] = "2px solid #ccc"
 
                 children.forEach {
-                    this.addChild(it)
+                    +it
                 }
             }
         }
@@ -47,7 +47,7 @@ class CTableBody : APureComponent() {
     override fun Components.render(children: List<AComponent<*>>) {
         tag("tbody") {
             children.forEach {
-                this.addChild(it)
+                +it
             }
         }
     }
@@ -63,7 +63,7 @@ class CTableRow(val height: Int?) : APureComponent() {
             style["height"] = if (this@CTableRow.height != null) " height: ${this@CTableRow.height}px;" else ""
 
             children.forEach {
-                this.addChild(it)
+                +it
             }
         }
     }
@@ -97,7 +97,7 @@ class MTableCell(
             }
 
             children.forEach {
-                this.addChild(it)
+                +it
             }
         }
     }

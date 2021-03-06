@@ -1,11 +1,10 @@
 package visage.ds.components
 
-import visage.ds.colorpalette.Skin
 import visage.core.AComponent
 import visage.core.APureComposite
 import visage.core.Components
 import visage.dom.div
-import visage.dom.text
+import visage.ds.colorpalette.Skin
 
 class CModal(private val title: String) : APureComposite() {
 
@@ -79,7 +78,7 @@ class CModal(private val title: String) : APureComposite() {
 
                 div {
                     style.apply { flex = "1"; color = "#fff"; fontSize = "18px"; fontWeight = "900" }
-                    text(this@CModal.title)
+                    +this@CModal.title
                 }
             }
 
@@ -101,7 +100,7 @@ class CModal(private val title: String) : APureComposite() {
                         color = " #fff";
                         textAlign = "center"
                     }
-                    text(this@CModal.error!!)
+                    +this@CModal.error!!
                 }
             }
 
@@ -115,7 +114,7 @@ class CModal(private val title: String) : APureComposite() {
 
                 children.forEach {
                     div {style.height = "16px"}
-                    this.addChild(it)
+                    +it
                 }
             }
         }

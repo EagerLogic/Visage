@@ -5,7 +5,6 @@ import visage.core.AComponent
 import visage.core.APureComponent
 import visage.core.Components
 import visage.dom.div
-import visage.dom.text
 import visage.ds.components.*
 import visagedoc.components.*
 
@@ -15,19 +14,16 @@ class CButtonScene : APureComponent() {
             DocPage {
                 title("Introduction")
                 p {
-                    text(
-                        """
+                    +"""
                     The button component represents a simple pushable button, and you can handle the onClick event of it.
                     I don't think it requires too much introduction, (I hope) everybody know what a button is.
-                """
-                    )
+                    """
+
                 }
 
                 title("Color")
                 p {
-                    text(
-                        "You can set the color of the button by it's color property."
-                    )
+                    +"You can set the color of the button by it's color property."
                 }
 
                 p {
@@ -68,7 +64,7 @@ Button("Danger") {
 
                 title("Size")
                 p {
-                    text("You can choose from 3 different sizes. The default is Normal.")
+                    +"You can choose from 3 different sizes. The default is Normal."
                 }
                 p {
                     Button("Small") {
@@ -101,7 +97,7 @@ Button("Large") {
 
                 title("Variant")
                 p {
-                    text("You can also choose from 3 different variants. The default is Filled.")
+                    +"You can also choose from 3 different variants. The default is Filled."
                 }
                 p {
                     Button("Filled") {
@@ -133,7 +129,7 @@ Button("Link") {
 
                 title("OnClick event")
                 p {
-                    text("You can listen to click events using the onClick attribute.")
+                    +"You can listen to click events using the onClick attribute."
                 }
                 p {
                     Button("Click me!") {

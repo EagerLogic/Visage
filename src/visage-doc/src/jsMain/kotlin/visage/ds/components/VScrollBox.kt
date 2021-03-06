@@ -63,7 +63,7 @@ class CVScrollBox(val height: String) : AComposite<CVScrollBox.Companion.State>(
                     style.apply { padding = this@CVScrollBox.padding }
 
                     children.forEach {
-                        this.addChild(it)
+                        +it
                     }
                 }
             }

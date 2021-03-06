@@ -6,7 +6,6 @@ import visage.core.APureComponent
 import visage.core.Components
 import visage.dom.Css
 import visage.dom.div
-import visage.dom.text
 import visage.ds.components.BasePageContent
 import visage.ds.forms.FieldModel
 import visagedoc.components.*
@@ -26,7 +25,7 @@ class CTextFieldScene : APureComponent() {
             DocPage {
                 title("Introduction")
                 p {
-                    text("The TextField component is responsible to get some textual information from the user.")
+                    +"The TextField component is responsible to get some textual information from the user."
                 }
                 p {
                     div {

@@ -3,8 +3,8 @@ package visagedoc.scenes.main
 import visage.core.*
 import visage.ds.components.*
 import visagedoc.scenes.HomeScene
-import visagedoc.scenes.ds.basics.DomComponentsScene
 import visagedoc.scenes.ds.basics.GettingStartedScene
+import visagedoc.scenes.ds.basics.TypeSafeBuildersScene
 import visagedoc.scenes.ds.components.ButtonScene
 import visagedoc.scenes.ds.components.TextFieldScene
 
@@ -26,7 +26,7 @@ class CMainScene() : AScene<Unit?, MainSceneModel, MainSceneState, MainControlle
 
                     group("Basics")
                     menuItem("Getting started", "flight_takeoff", "/basics/gettingStarted.vsg")
-                    menuItem("DOM Components", "code", "/basics/domComponents.vsg")
+                    menuItem("Type-safe builders", "precision_manufacturing", "/basics/typeSafeBuilders.vsg")
 
                     group("Design System")
                     groupMenuItem("Components", "dashboard", "/ds/components/") {
@@ -46,8 +46,8 @@ class CMainScene() : AScene<Unit?, MainSceneModel, MainSceneState, MainControlle
                 route("/basics/gettingStarted.vsg") {
                     GettingStartedScene()
                 }
-                route("/basics/domComponents.vsg") {
-                    DomComponentsScene()
+                route("/basics/typeSafeBuilders.vsg") {
+                    TypeSafeBuildersScene()
                 }
 
                 route("/ds/components/button.vsg") {

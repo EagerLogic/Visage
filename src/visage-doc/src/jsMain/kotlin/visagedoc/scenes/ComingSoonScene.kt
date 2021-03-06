@@ -4,7 +4,6 @@ import visage.core.AComponent
 import visage.core.APureComponent
 import visage.core.Components
 import visage.dom.div
-import visage.dom.text
 import visage.ds.components.BasePageContent
 
 class CComingSoonScene(val title: String) : APureComponent() {
@@ -19,7 +18,7 @@ class CComingSoonScene(val title: String) : APureComponent() {
                     color = "#333"
                 }
 
-                text("This page is under construction. Check back later")
+                +"This page is under construction. Check back later"
 
             }
         }
