@@ -11,7 +11,7 @@ import org.w3c.dom.events.WheelEvent
 import visage.core.*
 import kotlin.reflect.KProperty
 
-open class CTag(private val name: String) : APureComposite(), IDomNode {
+open class CTag(private val _name: String) : APureComposite(), IDomNode {
 
     val attr = TagAttributes()
     val style = TagStyles()
@@ -27,7 +27,7 @@ open class CTag(private val name: String) : APureComposite(), IDomNode {
     }
 
     final override fun createNode(): Node {
-        val res = document.createElement(name).unsafeCast<HTMLElement>()
+        val res = document.createElement(_name).unsafeCast<HTMLElement>()
         attr.applyProperties(res)
         style.applyProperties(res)
         events.applyProperties(res)
@@ -39,6 +39,10 @@ open class CTag(private val name: String) : APureComposite(), IDomNode {
         attr.updateProperties(element, (oldComponent.unsafeCast<CTag>()).attr)
         style.updateProperties(element, (oldComponent.unsafeCast<CTag>()).style)
         events.updateProperties(element, (oldComponent.unsafeCast<CTag>()).events)
+    }
+
+    internal fun isSameTag(other: CTag): Boolean {
+        return this._name == other._name
     }
 
 }

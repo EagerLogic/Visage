@@ -2,6 +2,7 @@ package visage.core
 
 import kotlinx.browser.window
 import org.w3c.dom.Node
+import visage.dom.CTag
 
 internal class Reconciler private constructor() {
 
@@ -47,11 +48,13 @@ internal class Reconciler private constructor() {
                     val oldComp = oldComponents[i]
                     var isUpdate = false
                     if (newComp._type == oldComp._type) {
-                        var state: Any? = oldComp._read_state_internal()
-                        state = newComp.onRestoreState(state!!)
-                        if (state != null) {
-                            isUpdate = true
-                            newComp._restore_state_internal(state)
+                        if (newComp !is CTag || oldComp is CTag && newComp.isSameTag(oldComp)) {
+                            var state: Any? = oldComp._read_state_internal()
+                            state = newComp.onRestoreState(state!!)
+                            if (state != null) {
+                                isUpdate = true
+                                newComp._restore_state_internal(state)
+                            }
                         }
                     }
                     newComp.doRender()
