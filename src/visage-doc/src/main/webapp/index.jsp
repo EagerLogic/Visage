@@ -9,7 +9,7 @@
 
     <body>
         <div id="root" style="width: 100%; height: 100%;"></div>
-        <script src="/app.js?v=<%= visagedoc.VersionKt.getVisageVersion() %>" type="text/javascript"></script>
+        <script src="/app.js?v=4" type="text/javascript"></script>
     </body>
 
 </html>

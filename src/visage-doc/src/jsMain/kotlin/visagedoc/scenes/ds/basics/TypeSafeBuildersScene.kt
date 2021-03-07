@@ -60,7 +60,7 @@ Modal("Login") {
                 +"""
                     This means you can do anything inside a component's initialization block what you can do in a simple function.
                     For example, you can use if statements to conditionally render components, you can use loops to render multiple components
-                    and you can also use fields, call other functions, etc... And if you call an another Components factory function, than that component will
+                    and you can also use fields, call other functions, etc... And if you call an another Components builder function, than that component will
                     be rendered inside the actual component as a child.
                 """
             }
@@ -90,7 +90,7 @@ Modal("Example modal") {
             title("Specifying Children with Type-safe builders")
             p {
                 +"""
-                    As you already seen, specifying a children with type-safe builders is very easy. All you need to do is 
+                    As you already seen, specifying children with type-safe builders is very easy. All you need to do is 
                     to call the child component's builder function inside the parent component's initialization block.
                 """
             }
