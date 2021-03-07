@@ -29,16 +29,17 @@ class CDocPage : APureComponent() {
 
 fun Components.DocPage(init: CDocPage.() -> Unit) = this.registerComponent(CDocPage(), init)
 
-class CDocTitle(val title: String) : APureComponent() {
-    override fun Components.render(children: List<AComponent<*>>) {
-        tag("h2") {
-            +this@CDocTitle.title
-        }
+fun CDocPage.title(title: String) = this.registerFunctionalComponent({}) {
+    tag("h2") {
+        +title
     }
-
 }
 
-fun CDocPage.title(title: String) = this.registerComponent(CDocTitle(title), {})
+fun CDocPage.subTitle(title: String) = this.registerFunctionalComponent({}) {
+    tag("h3") {
+        +title
+    }
+}
 
 fun CDocPage.p(init: CFunctionalComponent.() -> Unit) = this.registerFunctionalComponent(init) {
     tag("p") {
