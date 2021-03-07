@@ -1,7 +1,3 @@
-import java.net.URI
-import java.io.FileInputStream
-import java.util.Properties
-
 plugins {
     kotlin("multiplatform") version "1.4.0"
     id("org.jetbrains.dokka") version "1.4.0"
