@@ -56,11 +56,10 @@ class CTableBody : APureComponent() {
 
 fun CTable.body(init: CTableBody.() -> Unit) = this.registerComponent(CTableBody(), init)
 
-class CTableRow(val height: Int?) : APureComponent() {
+class CTableRow() : APureComponent() {
     override fun Components.render(children: List<AComponent<*>>) {
         tag("tr") {
             style["border-bottom"] = "1px solid #ddd"
-            style["height"] = if (this@CTableRow.height != null) " height: ${this@CTableRow.height}px;" else ""
 
             children.forEach {
                 +it
@@ -70,15 +69,17 @@ class CTableRow(val height: Int?) : APureComponent() {
 
 }
 
-fun CTableBody.row(height: Int? = null, init: CTableRow.() -> Unit) =
-        this.registerComponent(CTableRow(height), init)
+fun CTableBody.row(init: CTableRow.() -> Unit) =
+        this.registerComponent(CTableRow(), init)
 
 class MTableCell(
     val isHead: Boolean,
-    val width: String,
-    val hAlign: EHAlign,
-    val vAlign: EVAlign
+    val text: String? = null
 ) : APureComposite() {
+
+    var width: String = "auto"
+    var hAlign: EHAlign = EHAlign.Left
+    var vAlign = EVAlign.Middle
 
     override fun Components.render(children: List<AComponent<*>>) {
         tag(if (this@MTableCell.isHead) "th" else "td") {
@@ -96,8 +97,12 @@ class MTableCell(
                 EVAlign.Bottom -> "bottom"
             }
 
-            children.forEach {
-                +it
+            if (this@MTableCell.text != null) {
+                +this@MTableCell.text
+            } else {
+                children.forEach {
+                    +it
+                }
             }
         }
     }
@@ -105,15 +110,15 @@ class MTableCell(
 }
 
 fun CTableRow.cell(
-    width: String = "auto",
-    hAlign: EHAlign = EHAlign.Left,
-    vAlign: EVAlign = EVAlign.Top,
-    init: MTableCell.() -> Unit
-) = this.registerComponent(MTableCell(false, width, hAlign, vAlign), init)
+    text: String,
+    init: (MTableCell.() -> Unit) = {}
+) = this.registerComponent(MTableCell(false, text), init)
+
+fun CTableRow.cell(
+    init: (MTableCell.() -> Unit) = {}
+) = this.registerComponent(MTableCell(false), init)
 
 fun CTableHead.cell(
-    width: String = "auto",
-    hAlign: EHAlign = EHAlign.Left,
-    vAlign: EVAlign = EVAlign.Top,
-    init: MTableCell.() -> Unit
-) = this.registerComponent(MTableCell(true, width, hAlign, vAlign), init)
+    text: String,
+    init: (MTableCell.() -> Unit) = {}
+) = this.registerComponent(MTableCell(true, text), init)

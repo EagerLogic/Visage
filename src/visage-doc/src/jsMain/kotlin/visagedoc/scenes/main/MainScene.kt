@@ -11,8 +11,7 @@ import visagedoc.scenes.ds.basics.TypeSafeBuildersScene
 import visagedoc.scenes.ds.basics.elements.RenderingElementsScene
 import visagedoc.scenes.ds.basics.elements.StylingElementsScene
 import visagedoc.scenes.ds.basics.elements.UsingElementsScene
-import visagedoc.scenes.ds.components.ButtonScene
-import visagedoc.scenes.ds.components.TextFieldScene
+import visagedoc.scenes.ds.components.*
 
 fun Components.MainScene() = this.registerFunctionalComponent({}) {
     BasePageLayout {
@@ -32,6 +31,10 @@ fun Components.MainScene() = this.registerFunctionalComponent({}) {
                 group("Design System")
                 groupMenuItem("Components", "dashboard", "/ds/components/") {
                     menuItem("Button", "/ds/components/button.vsg")
+                    menuItem("CheckBox", "/ds/components/checkBox.vsg")
+                    menuItem("Select", "/ds/components/select.vsg")
+                    menuItem("Table", "/ds/components/table.vsg")
+                    menuItem("TextArea", "/ds/components/textArea.vsg")
                     menuItem("TextField", "/ds/components/textField.vsg")
                 }
                 //menuItem("Skin", "color_lens", "/ds/skin.vsg")
@@ -64,9 +67,22 @@ fun Components.MainScene() = this.registerFunctionalComponent({}) {
             route("/ds/components/button.vsg") {
                 ButtonScene()
             }
+            route("/ds/components/checkBox.vsg") {
+                CheckBoxScene()
+            }
+            route("/ds/components/select.vsg") {
+                SelectScene()
+            }
+            route("/ds/components/table.vsg") {
+                TableScene()
+            }
+            route("/ds/components/textArea.vsg") {
+                TextAreaScene()
+            }
             route("/ds/components/textField.vsg") {
                 TextFieldScene()
             }
+
             route("*") {
                 Navigation.pushLocation("/index.vsg")
             }

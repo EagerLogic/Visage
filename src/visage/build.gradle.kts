@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "io.github.eagerlogic"
-version = "0.2.20"
+version = "0.3.0"
 
 repositories {
     jcenter()
@@ -100,9 +100,9 @@ val developerId = "dipacs"
 project.group = publishedGroupId
 project.version = libraryVersion
 
-//signing {
-//    sign(publishing.publications)
-//}
+signing {
+    sign(publishing.publications)
+}
 
 afterEvaluate {
     configure<PublishingExtension> {

@@ -78,6 +78,8 @@ private val sideBarRootStyle = Css.createClass {
     minHeight = height
     maxHeight = height
     backgroundColor = Skin.palette.menuBackground
+    boxShadow = "1px 1px 10px rgba(0,0,0, 0.5)"
+    zIndex = "100"
 }
 
 private val contentRootStyle = Css.createClass {

@@ -62,21 +62,21 @@ class CTextFieldScene : APureComponent() {
                     }
                 }
                 codeBlock("""
-TextField("Empty", FieldModel("")) {
+TextField("Empty", FieldModel("", Unit)) {
     infoText = "This is the infoText"
 }
 
-TextField("With value", FieldModel("Some value")) {
+TextField("With value", FieldModel("Some value", Unit)) {
     infoText = "This is the infoText"
 }
 
-val model = FieldModel("Some value")
+val model = FieldModel("Some value", Unit)
 model.error = "This is an error message"
 TextField("With error", model) {
     infoText = "This is the infoText"
 }
 
-TextField("Disabled", FieldModel("Some value")) {
+TextField("Disabled", FieldModel("Some value", Unit)) {
     disabled = true
     infoText = "This is the infoText"
 }

@@ -13,7 +13,6 @@ class TextStyle(
     val fontWeight: EFontWeight,
     val color: String,
     val textAlign: ETextAlign,
-    val singleLine: Boolean,
     val uppercase: Boolean
 )
 
@@ -24,59 +23,23 @@ enum class ETextStyles(val textStyle: TextStyle) {
                     fontWeight = EFontWeight.Regular,
                     color = Skin.palette.textStrong,
                     textAlign = ETextAlign.LEFT,
-                    singleLine = false,
                     uppercase = false
             )
     ),
-    FieldLabel(
-        TextStyle(
-            fontSize = 12,
-            fontWeight = EFontWeight.Bold,
-            color = Skin.palette.textMedium,
-            textAlign = ETextAlign.LEFT,
-            singleLine = true,
-            uppercase = true
-        )
-    ),
-    FieldValue(
-            TextStyle(
-                    fontSize = 14,
-                    fontWeight = EFontWeight.Regular,
-                    color = Skin.palette.textStrong,
-                    textAlign = ETextAlign.LEFT,
-                    singleLine = false,
-                    uppercase = false
-            )
-    ),
-    FieldInfoText(
-            TextStyle(
-                    fontSize = 12,
-                    fontWeight = EFontWeight.Regular,
-                    color = Skin.palette.textWeak,
-                    textAlign = ETextAlign.LEFT,
-                    singleLine = false,
-                    uppercase = false
-            )
-    ),
-    FieldErrorText(
-            TextStyle(
-                    fontSize = 12,
-                    fontWeight = EFontWeight.Regular,
-                    color = Skin.palette.errorColor,
-                    textAlign = ETextAlign.LEFT,
-                    singleLine = false,
-                    uppercase = false
-            )
-    )
+
 
 }
 
 class CText internal constructor(val text: String, val style: TextStyle) : APureComponent() {
 
+    var singleLine = false
+
     override fun Components.render(children: List<AComponent<*>>) {
         div {
             style.apply {
                 width = "100%"
+                maxWidth = width
+                overflow = "hidden"
                 fontSize = "${this@CText.style.fontSize}px"
                 fontWeight = "${this@CText.style.fontWeight}"
                 color = this@CText.style.color
@@ -86,8 +49,7 @@ class CText internal constructor(val text: String, val style: TextStyle) : APure
                     ETextAlign.RIGHT -> "right"
                     ETextAlign.JUSTIFY -> "justify"
                 }
-                if (this@CText.style.singleLine) {
-                    overflow = "hidden"
+                if (this@CText.singleLine) {
                     textOverflow = "ellipsis"
                 }
                 if (this@CText.style.uppercase) {

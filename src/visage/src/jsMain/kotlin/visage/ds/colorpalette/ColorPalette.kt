@@ -104,7 +104,7 @@ class DefaultLightPalette : IColorPalette {
     override val menuItemSelectedColor: String = primaryColor
     override val menuSeparatorColor: String = "rgba(255,255,255, 0.1)"
 
-    override val headerBgColor: String = "#009688"
+    override val headerBgColor: String = "#265886"
     override val headerTextColor: String = "#fff"
 
 

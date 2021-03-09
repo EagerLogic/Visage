@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 buildscript {
     dependencies {
         "classpath"("com.google.cloud.tools:appengine-gradle-plugin:2.1.0")
@@ -16,9 +13,9 @@ plugins {
 apply(plugin = "com.google.cloud.tools.appengine")
 
 group = "io.github.eagerlogic"
-version = "0.2.20"
+version = "0.3.0"
 
-val visageVersion = "0.2.20"
+val visageVersion = "0.3.0"
 
 repositories {
     mavenLocal()

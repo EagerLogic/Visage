@@ -28,6 +28,7 @@ class CDocPage : APureComponent() {
 }
 
 fun Components.DocPage(init: CDocPage.() -> Unit) = this.registerComponent(CDocPage(), init)
+fun CBasePageContent.DocPage(init: CDocPage.() -> Unit) = this.registerComponent(CDocPage(), init)
 
 fun CDocPage.title(title: String) = this.registerFunctionalComponent({}) {
     tag("h2") {
@@ -86,22 +87,16 @@ class CDocProperties() : APureComponent() {
         tag("p") {
             Table {
                 head {
-                    cell {
-                        +"Name"
-                    }
-                    cell {
-                        +"Description"
-                    }
-                    cell {
-                        +"Default value"
-                    }
+                    cell("Name")
+                    cell("Description")
+                    cell("Default value")
                 }
                 body {
                     this@CDocProperties.props.forEach {
                         row {
-                            cell { +it.name }
-                            cell { +it.desc }
-                            cell { +it.default }
+                            cell(it.name )
+                            cell(it.desc )
+                            cell(it.default )
                         }
                     }
                 }
