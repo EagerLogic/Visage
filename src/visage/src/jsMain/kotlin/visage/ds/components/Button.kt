@@ -67,36 +67,33 @@ enum class EButtonSize(val styleClass: String) {
 }
 
 private val smallButtonStyleClass = Css.createClass {
-    paddingLeft = "12px"
-    paddingRight = "12px"
-    paddingTop = "6px"
-    paddingBottom = "6px"
-    fontSize = "12px"
+    paddingLeft = "24px"
+    paddingRight = "24px"
+    paddingTop = "8px"
+    paddingBottom = "8px"
+    fontSize = "13px"
     fontWeight = EFontWeight.Regular.cssValue
-    borderWidth = "2px"
-    borderStyle = "solid"
+    borderRadius = "3px"
 }
 
 private val normalButtonStyleClass = Css.createClass {
-    paddingLeft = "12px"
-    paddingRight = "12px"
-    paddingTop = "6px"
-    paddingBottom = "6px"
-    fontSize = "14px"
+    paddingLeft = "32px"
+    paddingRight = "32px"
+    paddingTop = "12px"
+    paddingBottom = "12px"
+    fontSize = "15px"
     fontWeight = EFontWeight.SemiBold.cssValue
-    borderWidth = "3px"
-    borderStyle = "solid"
+    borderRadius = "4px"
 }
 
 private val largeButtonStyleClass = Css.createClass {
-    paddingLeft = "20px"
-    paddingRight = "20px"
-    paddingTop = "8px"
-    paddingBottom = "8px"
+    paddingLeft = "40px"
+    paddingRight = "40px"
+    paddingTop = "14px"
+    paddingBottom = "14px"
     fontSize = "16px"
     fontWeight = EFontWeight.SemiBold.cssValue
-    borderWidth = "4px"
-    borderStyle = "solid"
+    borderRadius = "6px"
 }
 
 
@@ -109,28 +106,28 @@ enum class EButtonVariant {
 
 }
 
-enum class EButtonColor(val normalColor: String, val darkColor: String) {
-    Default(normalColor = Skin.palette.primaryColor, darkColor = Skin.palette.primaryDarkColor),
-    Success(normalColor = Skin.palette.successColor, darkColor = Skin.palette.successDarkColor),
-    Warning(normalColor = Skin.palette.warningColor, darkColor = Skin.palette.warningDarkColor),
-    Danger(normalColor = Skin.palette.dangerColor, darkColor = Skin.palette.dangerDarkColor)
+enum class EButtonColor(val normalColor: String) {
+    Default(normalColor = Skin.palette.primaryColor),
+    Success(normalColor = Skin.palette.successColor),
+    Warning(normalColor = Skin.palette.warningColor),
+    Danger(normalColor = Skin.palette.dangerColor)
 }
 
 private fun createButtonStyleClass(variant: EButtonVariant, buttonColor: EButtonColor): String {
     return when (variant) {
         EButtonVariant.Filled -> Css.createClass {
             backgroundColor = buttonColor.normalColor
-            borderColor = buttonColor.darkColor
             color = Skin.palette.lightTextStrong
         }
         EButtonVariant.Outlined -> Css.createClass {
             backgroundColor = "transparent"
             borderColor = buttonColor.normalColor
+            borderWidth = "2px"
+            borderStyle = "solid"
             color = buttonColor.normalColor
         }
         EButtonVariant.Link -> Css.createClass {
             backgroundColor = "transparent"
-            borderColor = "transparent"
             color = buttonColor.normalColor
         }
     }

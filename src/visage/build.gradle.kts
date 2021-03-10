@@ -100,9 +100,9 @@ val developerId = "dipacs"
 project.group = publishedGroupId
 project.version = libraryVersion
 
-signing {
-    sign(publishing.publications)
-}
+//signing {
+//    sign(publishing.publications)
+//}
 
 afterEvaluate {
     configure<PublishingExtension> {

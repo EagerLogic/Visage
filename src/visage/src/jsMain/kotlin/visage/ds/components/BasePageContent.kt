@@ -44,6 +44,10 @@ class CBasePageContent(
 
                     children.forEach {
                         +it
+
+                        div {
+                            style.minHeight = "32px"
+                        }
                     }
                 }
             }
@@ -133,6 +137,10 @@ private val sectionRootStyle = Css.createClass {
     minWidth = width
     maxWidth = width
     overflowX = "hidden"
+    backgroundColor = Skin.palette.sectionBgColor
+    borderRadius = "8px"
+    padding = "32px"
+    boxShadow = "1px 1px 5px rgba(0,0,0, 0.5)"
 }
 
 private val sectionTitleStyle = Css.createClass {

@@ -55,10 +55,12 @@ interface IColorPalette {
     val headerBgColor: String
     val headerTextColor: String
 
+    val sectionBgColor: String
+
 }
 
 class DefaultLightPalette : IColorPalette {
-    override val bgColor: String = "#ffffff"
+    override val bgColor: String = "#f8f8f8"
 
     override val primaryColor: String = "#4FC0E8"
     override val primaryLightColor: String = "#66D4F1"
@@ -106,6 +108,8 @@ class DefaultLightPalette : IColorPalette {
 
     override val headerBgColor: String = "#265886"
     override val headerTextColor: String = "#fff"
+
+    override val sectionBgColor: String = "#fff"
 
 
 }
