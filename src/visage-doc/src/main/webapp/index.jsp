@@ -12,7 +12,7 @@
 
     <body>
         <div id="root" style="width: 100%; height: 100%;"></div>
-        <script src="/app.js?v=6" type="text/javascript"></script>
+        <script src="/app.js?v=7" type="text/javascript"></script>
     </body>
 
 </html>

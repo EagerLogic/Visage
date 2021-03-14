@@ -28,7 +28,7 @@ class CDocPage : APureComponent() {
 }
 
 fun Components.DocPage(init: CDocPage.() -> Unit) = this.registerComponent(CDocPage(), init)
-fun CBasePageContent.DocPage(init: CDocPage.() -> Unit) = this.registerComponent(CDocPage(), init)
+fun CPageContent.DocPage(init: CDocPage.() -> Unit) = this.registerComponent(CDocPage(), init)
 
 fun CDocPage.title(title: String) = this.registerFunctionalComponent({}) {
     tag("h2") {

@@ -1,20 +1,13 @@
 package visagedoc.scenes.main
 
 import visage.core.Components
-import visage.core.Navigation
 import visage.core.Router
 import visage.core.route
 import visage.ds.components.*
-import visagedoc.scenes.HomeScene
-import visagedoc.scenes.ds.basics.GettingStartedScene
-import visagedoc.scenes.ds.basics.TypeSafeBuildersScene
-import visagedoc.scenes.ds.basics.elements.RenderingElementsScene
-import visagedoc.scenes.ds.basics.elements.StylingElementsScene
-import visagedoc.scenes.ds.basics.elements.UsingElementsScene
-import visagedoc.scenes.ds.components.*
+import visagedoc.scenes.ds.ShowcaseScene
 
 fun Components.MainScene() = this.registerFunctionalComponent({}) {
-    BasePageLayout {
+    PageLayout {
         menu {
             items {
                 menuItem("Home", "home", "/index.vsg")
@@ -29,6 +22,7 @@ fun Components.MainScene() = this.registerFunctionalComponent({}) {
                 }
 
                 group("Design System")
+                menuItem("Showcase", "home", "/ds/showcase.vsg")
                 groupMenuItem("Components", "dashboard", "/ds/components/") {
                     menuItem("Button", "/ds/components/button.vsg")
                     menuItem("CheckBox", "/ds/components/checkBox.vsg")
@@ -42,50 +36,53 @@ fun Components.MainScene() = this.registerFunctionalComponent({}) {
         }
 
         Router {
-            route("/index.vsg") {
-                HomeScene()
-            }
-
-            // basics
-            route("/basics/gettingStarted.vsg") {
-                GettingStartedScene()
-            }
-            route("/basics/typeSafeBuilders.vsg") {
-                TypeSafeBuildersScene()
-            }
-            route("/basics/elements/renderingElements.vsg") {
-                RenderingElementsScene()
-            }
-            route("/basics/elements/usingElements.vsg") {
-                UsingElementsScene()
-            }
-            route("/basics/elements/stylingElements.vsg") {
-                StylingElementsScene()
-            }
-
-            // design system
-            route("/ds/components/button.vsg") {
-                ButtonScene()
-            }
-            route("/ds/components/checkBox.vsg") {
-                CheckBoxScene()
-            }
-            route("/ds/components/select.vsg") {
-                SelectScene()
-            }
-            route("/ds/components/table.vsg") {
-                TableScene()
-            }
-            route("/ds/components/textArea.vsg") {
-                TextAreaScene()
-            }
-            route("/ds/components/textField.vsg") {
-                TextFieldScene()
-            }
-
             route("*") {
-                Navigation.pushLocation("/index.vsg")
+                ShowcaseScene()
             }
+//            route("/index.vsg") {
+//                HomeScene()
+//            }
+//
+//            // basics
+//            route("/basics/gettingStarted.vsg") {
+//                GettingStartedScene()
+//            }
+//            route("/basics/typeSafeBuilders.vsg") {
+//                TypeSafeBuildersScene()
+//            }
+//            route("/basics/elements/renderingElements.vsg") {
+//                RenderingElementsScene()
+//            }
+//            route("/basics/elements/usingElements.vsg") {
+//                UsingElementsScene()
+//            }
+//            route("/basics/elements/stylingElements.vsg") {
+//                StylingElementsScene()
+//            }
+//
+//            // design system
+//            route("/ds/components/button.vsg") {
+//                ButtonScene()
+//            }
+//            route("/ds/components/checkBox.vsg") {
+//                CheckBoxScene()
+//            }
+//            route("/ds/components/select.vsg") {
+//                SelectScene()
+//            }
+//            route("/ds/components/table.vsg") {
+//                TableScene()
+//            }
+//            route("/ds/components/textArea.vsg") {
+//                TextAreaScene()
+//            }
+//            route("/ds/components/textField.vsg") {
+//                TextFieldScene()
+//            }
+//
+//            route("*") {
+//                Navigation.pushLocation("/index.vsg")
+//            }
         }
     }
 }

@@ -47,7 +47,7 @@ class MHorizontalLoadIndicator(val progress: Int?) : AComponent<MHorizontalLoadI
                 style.apply {
                     width = "${this@MHorizontalLoadIndicator.state.progress}%"
                     height = "100%"
-                    backgroundColor = EButtonColor.Default.normalColor
+                    backgroundColor = EButtonColor.Primary.normalColor
                 }
             }
         }
