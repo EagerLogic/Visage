@@ -4,8 +4,28 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLHeadElement
 import org.w3c.dom.HTMLStyleElement
 import org.w3c.dom.get
+import visage.core.Event
+import kotlin.reflect.KProperty
 
-class CssClass : TagStyles() {
+class CssClass(private val init: CssStyleClass.() -> Unit) {
+    private var className: String? = null
+
+    init {
+        Css.onClearCache.addListener {
+            this.className = null
+        }
+    }
+
+    operator fun <G> getValue(instance: G?, property: KProperty<*>): String {
+        if (className == null) {
+            className = Css.createClass(init)
+        }
+        return className!!
+    }
+
+}
+
+class CssStyleClass : TagStyles() {
 
     val pseudoClasses = CssPseudoClasses()
 
@@ -83,12 +103,19 @@ class CssPseudoClasses {
     }
 }
 
+
+
 object Css {
 
     private var addedStyles = mutableMapOf<String, Boolean>()
+    internal val onClearCache =  Event<Unit>()
 
-    fun createClass(init: CssClass.() -> Unit): String {
-        val css = CssClass()
+    fun clearCache() {
+        this.onClearCache.fire(Unit)
+    }
+
+    internal fun createClass(init: CssStyleClass.() -> Unit): String {
+        val css = CssStyleClass()
         css.init()
 
         return this.applyCssClass(css)
@@ -101,11 +128,11 @@ object Css {
         return this.applyCssBlock(selector, css)
     }
 
-    private fun applyCssClass(css: CssClass): String {
-        val cssStr = getStyleString(css)
+    private fun applyCssClass(cssStyle: CssStyleClass): String {
+        val cssStr = getStyleString(cssStyle)
         val pseudoStrs = mutableMapOf<String, String>()
         var hashBase = cssStr
-        for (item in css.pseudoClasses) {
+        for (item in cssStyle.pseudoClasses) {
             val pseudoStyleStr = getStyleString(item.value)
             pseudoStrs[item.key] = pseudoStyleStr
             hashBase += "|${pseudoStyleStr}"
@@ -155,13 +182,13 @@ object Css {
 
 }
 
-fun cssBlock(selector: String, init: CssBlock.() -> Unit) {
-    Css.createBlock(selector, init)
-}
-
-fun cssClass(init: CssClass.() -> Unit): String {
-    return Css.createClass(init)
-}
+//fun cssBlock(selector: String, init: CssBlock.() -> Unit) {
+//    Css.createBlock(selector, init)
+//}
+//
+//fun cssClass(init: CssClass.() -> Unit): String {
+//    return Css.createClass(init)
+//}
 
 private fun String.hash(): String {
     var h1 = 0xdeadbeef.toInt()

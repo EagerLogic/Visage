@@ -1,10 +1,10 @@
-//package visagedoc.scenes.ds.basics.elements
+//package visagedoc.scenes.basics.elements
 //
 //import kotlinx.browser.window
 //import visage.core.Components
 //import visage.dom.button
 //import visage.ds.components.AttentionMessage
-//import visage.ds.components.PageContent
+//import visage.ds.components.page.PageContent
 //import visage.ds.components.EAttentionMessageType
 //import visagedoc.components.DocPage
 //import visagedoc.components.codeBlock

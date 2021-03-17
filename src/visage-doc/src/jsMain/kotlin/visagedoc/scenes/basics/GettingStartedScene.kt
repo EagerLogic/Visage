@@ -1,9 +1,9 @@
-//package visagedoc.scenes.ds.basics
+//package visagedoc.scenes.basics
 //
 //import visage.core.AComponent
 //import visage.core.APureComponent
 //import visage.core.Components
-//import visage.ds.components.PageContent
+//import visage.ds.components.page.PageContent
 //import visagedoc.components.DocPage
 //import visagedoc.components.codeBlock
 //import visagedoc.components.p

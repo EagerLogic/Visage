@@ -1,26 +1,23 @@
 package visagedoc.components
 
 import visage.core.*
-import visage.dom.Css
+import visage.dom.CssClass
 import visage.dom.div
 import visage.dom.tag
+import visage.ds.colorpalette.Skin
 import visage.ds.components.*
 
 class CDocPage : APureComponent() {
     override fun Components.render(children: List<AComponent<*>>) {
-        div {
-            style.apply {
-                width = "100%"
-                display = "flex"
-                justifyContent = "center"
-            }
+        Card {
+            body {
+                div {
+                    style.width = "100%"
+                    style.padding = "16px"
 
-            div {
-                style.width = "100%"
-                style.maxWidth = "100%"
-
-                children.forEach {
-                    +it
+                    children.forEach {
+                        +it
+                    }
                 }
             }
         }
@@ -28,16 +25,17 @@ class CDocPage : APureComponent() {
 }
 
 fun Components.DocPage(init: CDocPage.() -> Unit) = this.registerComponent(CDocPage(), init)
-fun CPageContent.DocPage(init: CDocPage.() -> Unit) = this.registerComponent(CDocPage(), init)
 
 fun CDocPage.title(title: String) = this.registerFunctionalComponent({}) {
     tag("h2") {
+        style.color = Skin.palette.strongTextColor
         +title
     }
 }
 
 fun CDocPage.subTitle(title: String) = this.registerFunctionalComponent({}) {
     tag("h3") {
+        style.color = Skin.palette.strongTextColor
         +title
     }
 }
@@ -45,6 +43,8 @@ fun CDocPage.subTitle(title: String) = this.registerFunctionalComponent({}) {
 fun CDocPage.p(init: CFunctionalComponent.() -> Unit) = this.registerFunctionalComponent(init) {
     tag("p") {
         style.textAlign = "justify"
+        style.fontSize = "14px"
+        style.color = Skin.palette.normalTextColor
         it.forEach {
             +it
         }
@@ -59,7 +59,7 @@ fun CDocPage.codeBlock(code: String) = this.registerFunctionalComponent({}) {
     }
 }
 
-private val codeBlockStyle = Css.createClass {
+private val codeBlockStyle by CssClass {
     width = "100%"
     padding = "16px"
     backgroundColor = "#444548"
@@ -81,15 +81,16 @@ class CDocProperties() : APureComponent() {
 
     override fun Components.render(children: List<AComponent<*>>) {
         tag("h2") {
+            style.color = Skin.palette.strongTextColor
             +"Properties"
         }
 
         tag("p") {
             Table {
-                head {
-                    cell("Name")
-                    cell("Description")
-                    cell("Default value")
+                columns {
+                    fixedColumn("Name")
+                    responsiveColumn("Description")
+                    responsiveColumn("Default value")
                 }
                 body {
                     this@CDocProperties.props.forEach {

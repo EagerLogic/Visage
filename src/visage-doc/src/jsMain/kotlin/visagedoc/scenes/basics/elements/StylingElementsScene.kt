@@ -1,9 +1,9 @@
-//package visagedoc.scenes.ds.basics.elements
+//package visagedoc.scenes.basics.elements
 //
 //import visage.core.Components
 //import visage.ds.components.AttentionMessage
 //import visage.ds.components.EAttentionMessageType
-//import visage.ds.components.PageContent
+//import visage.ds.components.page.PageContent
 //import visagedoc.components.*
 //
 //fun Components.StylingElementsScene() = this.registerFunctionalComponent({}) {

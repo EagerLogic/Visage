@@ -3,7 +3,7 @@ package visage.ds.components
 import kotlinx.browser.document
 import org.w3c.dom.HTMLDivElement
 import visage.core.*
-import visage.dom.Css
+import visage.dom.CssClass
 import visage.dom.div
 
 class CVScrollBox(val height: String) : AComposite<CVScrollBox.Companion.State>() {
@@ -82,7 +82,7 @@ class CVScrollBox(val height: String) : AComposite<CVScrollBox.Companion.State>(
 
 }
 
-private val rootStyle = Css.createClass {
+private val rootStyle by CssClass {
     width = "100%"
     minWidth = "100%"
     maxWidth = "100%"
@@ -90,7 +90,7 @@ private val rootStyle = Css.createClass {
     position = "relative"
 }
 
-private val hiddenScrollStyle = Css.createClass {
+private val hiddenScrollStyle by CssClass {
     this["scrollbar-width"] = "none"
     width = "200%"
     minWidth = width
@@ -102,7 +102,7 @@ private val hiddenScrollStyle = Css.createClass {
     overflowY = "scroll"
 }
 
-private val contentBoxStyle = Css.createClass {
+private val contentBoxStyle by CssClass {
     width = "50%"
     minWidth = width
     maxWidth = width
@@ -111,7 +111,7 @@ private val contentBoxStyle = Css.createClass {
     overflowY = "visible"
 }
 
-private val scrollThumbStyle = Css.createClass {
+private val scrollThumbStyle by CssClass {
     position = "absolute"
     width = "4px"
     minHeight = "20px"

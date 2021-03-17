@@ -3,7 +3,7 @@ package visage.ds.components
 import visage.core.AComponent
 import visage.core.APureComponent
 import visage.core.Components
-import visage.dom.Css
+import visage.dom.CssClass
 import visage.dom.TagStyles
 import visage.dom.div
 import visage.ds.colorpalette.Skin
@@ -56,7 +56,7 @@ class CButton(var text: String?, var icon: String?) : APureComponent() {
                         fontSize = when (this@CButton.size) {
                             EButtonSize.Small -> "18px"
                             EButtonSize.Normal -> "22px"
-                            EButtonSize.Large -> "24px"
+                            EButtonSize.Large -> "26px"
                         }
                         flexGrow = "0"
                         flexShrink = "0"
@@ -94,14 +94,14 @@ class CButton(var text: String?, var icon: String?) : APureComponent() {
 
 }
 
-private val buttonBaseClass = Css.createClass {
+private val buttonBaseClass by CssClass {
     display = "inline-flex"
     alignItems = "stretch"
     justifyContent = "center"
     flexDirection = "row"
 }
 
-private val enabledButtonBaseClass = Css.createClass {
+private val enabledButtonBaseClass by CssClass {
     cursor = "pointer"
     pseudo {
         hover {
@@ -113,10 +113,9 @@ private val enabledButtonBaseClass = Css.createClass {
     }
 }
 
-private val disabledButtonBaseClass = Css.createClass {
+private val disabledButtonBaseClass by CssClass {
     opacity = "0.4"
 }
-
 
 
 enum class EButtonSize(val styleClass: String) {
@@ -125,33 +124,32 @@ enum class EButtonSize(val styleClass: String) {
     Large((largeButtonStyleClass))
 }
 
-private val smallButtonStyleClass = Css.createClass {
+private val smallButtonStyleClass by CssClass {
+    paddingLeft = "20px"
+    paddingRight = "20px"
+    height = "32px"
+    fontSize = "12px"
+    fontWeight = EFontWeight.Regular.cssValue
+    borderRadius = "4px"
+}
+
+private val normalButtonStyleClass by CssClass {
     paddingLeft = "24px"
     paddingRight = "24px"
     height = "40px"
-    fontSize = "13px"
-    fontWeight = EFontWeight.Regular.cssValue
-    borderRadius = "3px"
-}
-
-private val normalButtonStyleClass = Css.createClass {
-    paddingLeft = "32px"
-    paddingRight = "32px"
-    height = "48px"
-    fontSize = "15px"
+    fontSize = "14px"
     fontWeight = EFontWeight.SemiBold.cssValue
     borderRadius = "4px"
 }
 
-private val largeButtonStyleClass = Css.createClass {
-    paddingLeft = "40px"
-    paddingRight = "40px"
-    height = "52px"
+private val largeButtonStyleClass by CssClass {
+    paddingLeft = "32px"
+    paddingRight = "32px"
+    height = "48px"
     fontSize = "16px"
     fontWeight = EFontWeight.SemiBold.cssValue
-    borderRadius = "6px"
+    borderRadius = "4px"
 }
-
 
 
 enum class EButtonVariant {
@@ -162,12 +160,20 @@ enum class EButtonVariant {
 
 }
 
-enum class EButtonColor(val normalColor: String) {
-    Primary(normalColor = Skin.palette.primaryColor),
-    Secondary(normalColor = Skin.palette.secondaryColor),
-    Success(normalColor = Skin.palette.successColor),
-    Warning(normalColor = Skin.palette.warningColor),
-    Danger(normalColor = Skin.palette.dangerColor)
+enum class EButtonColor(private val getter: () -> String) {
+
+    Primary({ Skin.palette.primaryColor }),
+    Secondary({ Skin.palette.secondaryColor }),
+    Success({ Skin.palette.successColor }),
+    Warning({ Skin.palette.warningColor }),
+    Danger({ Skin.palette.dangerColor });
+
+    val normalColor: String
+        get() {
+            return getter()
+        }
+
+
 }
 
 private fun createButtonStyle(variant: EButtonVariant, buttonColor: EButtonColor): TagStyles {
@@ -175,7 +181,7 @@ private fun createButtonStyle(variant: EButtonVariant, buttonColor: EButtonColor
         EButtonVariant.Filled -> TagStyles().apply {
             backgroundColor = buttonColor.normalColor
             color = Skin.palette.negativeStrongTextColor
-            border = "2px solid ${buttonColor.normalColor}"
+            border = "2px solid transparent"
         }
         EButtonVariant.Outlined -> TagStyles().apply {
             backgroundColor = "transparent"

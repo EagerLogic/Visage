@@ -1,10 +1,12 @@
-package visage.ds.components
+package visage.ds.components.page
 
 import visage.core.*
-import visage.dom.Css
+import visage.dom.CssClass
 import visage.dom.div
 import visage.dom.tag
 import visage.ds.colorpalette.Skin
+import visage.ds.components.Icon
+import visage.ds.components.VScrollBox
 import visage.ds.utils.EFontWeight
 import visage.ds.utils.ERenderMode
 import visage.ds.utils.RenderMode
@@ -43,115 +45,6 @@ object SideMenu {
     }
 }
 
-class CPageLayout : APureComposite() {
-
-    override fun Components.render(children: List<AComponent<*>>) {
-
-        div {
-            classes = basePageRootStyle
-
-            div {
-                classes = sideBarRootStyle
-                style.left = if (SideMenu.isOpened) {
-                    "0px"
-                } else {
-                    "-300px"
-                }
-
-                var menuFound = false
-                children.forEach {
-                    if (menuFound) {
-                        return@forEach
-                    }
-
-                    if (it is CMenu) {
-                        menuFound = true
-                        +it
-                    }
-                }
-            }
-
-
-
-            if (!RenderMode.collapsed && SideMenu.isOpened) {
-                div {
-                    style.apply {
-                        width = "280px"
-                        minWidth = width
-                        maxWidth = width
-                        height = "100%"
-                    }
-                }
-            }
-
-            if (RenderMode.collapsed && SideMenu.isOpened) {
-                div {
-                    classes = sideBarBlenderStyle
-                    events.onClick = {
-                        SideMenu.close()
-                    }
-                }
-            }
-
-            div {
-                classes = contentRootStyle
-                if (RenderMode.collapsed && SideMenu.isOpened) {
-                    style["filter"] = "blur(4px)"
-                }
-
-                children.forEach {
-                    if (!(it is CMenu)) {
-                        +it
-                    }
-                }
-            }
-        }
-    }
-
-}
-
-fun Components.PageLayout(init: CPageLayout.() -> Unit) = this.registerComponent(CPageLayout(), init)
-
-private val basePageRootStyle = Css.createClass {
-    display = "flex"
-    width = "100%"
-    height = "100%"
-}
-
-private val sideBarRootStyle = Css.createClass {
-    width = "280px"
-    minWidth = width
-    maxWidth = width
-    height = "100%"
-    minHeight = height
-    maxHeight = height
-    position = "fixed"
-    left = "0px"
-    top = "0px"
-    bottom = "0px"
-    backgroundColor = Skin.palette.sideMenuBgColor
-    boxShadow = "1px 1px 10px rgba(0,0,0, 0.5)"
-    zIndex = "1010"
-}
-
-private val sideBarBlenderStyle = Css.createClass {
-    position = "fixed"
-    left = "0px"
-    top = "0px"
-    right = "0px"
-    bottom = "0px"
-    backgroundColor = "rgba(0,0,0, 0.7)"
-    zIndex = "1000"
-    cursor = "pointer"
-}
-
-private val contentRootStyle = Css.createClass {
-    flexGrow = "1"
-    height = "100%"
-    overflow = "auto"
-    backgroundColor = Skin.palette.bgColor
-}
-
 // ---------------------------------------------------------------------------------------------------------------------
 
 class CMenu : APureComponent() {
@@ -183,7 +76,7 @@ class CMenu : APureComponent() {
 
             div {
                 style.apply {
-                    width = "100%"; minHeight = "1px"; backgroundColor = Skin.palette.negativeStrongSeparatorColor
+                    width = "100%"; minHeight = "1px"; backgroundColor = Skin.palette.sideMenuSeparatorColor
                 }
             }
 
@@ -230,7 +123,7 @@ class CMenu : APureComponent() {
                             div {
                                 style.apply {
                                     width = "100%"; height = "1px"; backgroundColor =
-                                    Skin.palette.negativeStrongSeparatorColor
+                                    Skin.palette.sideMenuSeparatorColor
                                 }
                             }
                             +it
@@ -249,9 +142,9 @@ class CMenu : APureComponent() {
  *
  * @param init Define the content of the menu inside this init block.
  */
-fun CPageLayout.menu(init: CMenu.() -> Unit) = this.registerComponent(CMenu(), init)
+fun CApplication.menu(init: CMenu.() -> Unit) = this.registerComponent(CMenu(), init)
 
-private val menuRootStyle = Css.createClass {
+private val menuRootStyle by CssClass {
     width = "100%"
     minWidth = width
     maxWidth = width
@@ -263,7 +156,7 @@ private val menuRootStyle = Css.createClass {
     overflow = "hidden"
 }
 
-private val menuHeaderStyle = Css.createClass {
+private val menuHeaderStyle by CssClass {
     width = "100%"
     maxWidth = "100%"
     minHeight = "64px"
@@ -276,13 +169,13 @@ private val menuHeaderStyle = Css.createClass {
     padding = "8px"
 }
 
-private val menuTopBlockStyle = Css.createClass {
+private val menuTopBlockStyle by CssClass {
     width = "100%"
     flexGrow = "1"
     overflow = "hidden"
 }
 
-private val menuBottomBlockStyle = Css.createClass {
+private val menuBottomBlockStyle by CssClass {
     width = "100%"
 }
 
@@ -305,7 +198,7 @@ class CMenuItemBlock(val isBottom: Boolean) : APureComponent() {
 fun CMenu.items(init: CMenuItemBlock.() -> Unit) = this.registerComponent(CMenuItemBlock(false), init)
 fun CMenu.footer(init: CMenuItemBlock.() -> Unit) = this.registerComponent(CMenuItemBlock(true), init)
 
-private val menuItemBlockRootStyle = Css.createClass {
+private val menuItemBlockRootStyle by CssClass {
     width = "100%"
     display = "flex"
     flexDirection = "column"
@@ -341,7 +234,7 @@ class CGroupMenuItem(
                     style.apply {
                         width = "48px"
                     }
-                    Icon(this@CGroupMenuItem.icon, Skin.palette.negativeNormalTextColor, 24)
+                    Icon(this@CGroupMenuItem.icon, Skin.palette.sideMenuInactiveTextColor, 24)
                 }
 
                 div {
@@ -366,7 +259,7 @@ class CGroupMenuItem(
 fun CMenuItemBlock.groupMenuItem(title: String, icon: String, path: String, init: CGroupMenuItem.() -> Unit) =
     this.registerComponent(CGroupMenuItem(title, icon, path), init)
 
-private val groupMenuItemRootStyle = Css.createClass {
+private val groupMenuItemRootStyle by CssClass {
     padding = "4px 16px 4px 16px"
     cursor = "pointer"
     display = "flex"
@@ -379,15 +272,15 @@ private val groupMenuItemRootStyle = Css.createClass {
     }
 }
 
-private val groupMenuItemTitleBaseStyle = Css.createClass {
+private val groupMenuItemTitleBaseStyle by CssClass {
     flexGrow = "1"
     overflow = "hidden"
     textOverflow = "ellipsis"
     fontSize = "15px"
 }
 
-private val groupMenuItemTitleUnselectedStyle = Css.createClass {
-    color = Skin.palette.negativeNormalTextColor
+private val groupMenuItemTitleUnselectedStyle by CssClass {
+    color = Skin.palette.sideMenuInactiveTextColor
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -397,7 +290,12 @@ class CLeafMenuItem(val title: String, val icon: String, val href: String) : APu
         val isSelected = Navigation.currentLocation.path == this@CLeafMenuItem.href
         div {
             classes = leafMenuItemRootStyle
-            events.onClick = { Navigation.pushLocation(this@CLeafMenuItem.href) }
+            events.onClick = {
+                if (RenderMode.collapsed) {
+                    SideMenu.close()
+                }
+                Navigation.pushLocation(this@CLeafMenuItem.href)
+            }
 
             div {
                 style.apply {
@@ -405,7 +303,7 @@ class CLeafMenuItem(val title: String, val icon: String, val href: String) : APu
                 }
                 Icon(
                     this@CLeafMenuItem.icon,
-                    if (isSelected) Skin.palette.primaryColor else Skin.palette.negativeNormalTextColor,
+                    if (isSelected) Skin.palette.sideMenuActiveTextColor else Skin.palette.sideMenuInactiveTextColor,
                     24
                 )
             }
@@ -424,7 +322,7 @@ class CLeafMenuItem(val title: String, val icon: String, val href: String) : APu
 fun CMenuItemBlock.menuItem(title: String, icon: String, href: String) =
     this.registerComponent(CLeafMenuItem(title, icon, href), { })
 
-private val leafMenuItemRootStyle = Css.createClass {
+private val leafMenuItemRootStyle by CssClass {
     padding = "4px 16px 4px 16px"
     cursor = "pointer"
     display = "flex"
@@ -437,19 +335,19 @@ private val leafMenuItemRootStyle = Css.createClass {
     }
 }
 
-private val leafMenuItemTitleBaseStyle = Css.createClass {
+private val leafMenuItemTitleBaseStyle by CssClass {
     flexGrow = "1"
     overflow = "hidden"
     textOverflow = "ellipsis"
     fontSize = "15px"
 }
 
-private val leafMenuItemTitleUnselectedStyle = Css.createClass {
-    color = Skin.palette.negativeNormalTextColor
+private val leafMenuItemTitleUnselectedStyle by CssClass {
+    color = Skin.palette.sideMenuInactiveTextColor
 }
 
-private val leafMenuItemTitleSelectedStyle = Css.createClass {
-    color = Skin.palette.primaryColor
+private val leafMenuItemTitleSelectedStyle by CssClass {
+    color = Skin.palette.sideMenuActiveTextColor
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -462,9 +360,14 @@ class CChildMenuItem(
         val isSelected = Navigation.currentLocation.path == this@CChildMenuItem.href
         div {
             classes = childMenuItemRootStyle
-            events.onClick = { Navigation.pushLocation(this@CChildMenuItem.href) }
+            events.onClick = {
+                if (RenderMode.collapsed) {
+                    SideMenu.close()
+                }
+                Navigation.pushLocation(this@CChildMenuItem.href)
+            }
 
-            Icon("trip_origin", if (isSelected) Skin.palette.primaryColor else Skin.palette.negativeNormalTextColor, 10)
+            Icon("trip_origin", if (isSelected) Skin.palette.sideMenuActiveTextColor else Skin.palette.sideMenuInactiveTextColor, 10)
 
             div { style.width = "16px" }
 
@@ -481,7 +384,7 @@ class CChildMenuItem(
 
 fun CGroupMenuItem.menuItem(title: String, href: String) = this.registerComponent(CChildMenuItem(title, href), {})
 
-private val childMenuItemRootStyle = Css.createClass {
+private val childMenuItemRootStyle by CssClass {
     padding = "4px 16px 4px 64px"
     cursor = "pointer"
     display = "flex"
@@ -494,19 +397,19 @@ private val childMenuItemRootStyle = Css.createClass {
     }
 }
 
-private val childMenuItemTitleBaseStyle = Css.createClass {
+private val childMenuItemTitleBaseStyle by CssClass {
     flexGrow = "1"
     overflow = "hidden"
     textOverflow = "ellipsis"
     fontSize = "15px"
 }
 
-private val childMenuItemTitleUnselectedStyle = Css.createClass {
-    color = Skin.palette.negativeNormalTextColor
+private val childMenuItemTitleUnselectedStyle by CssClass {
+    color = Skin.palette.sideMenuInactiveTextColor
 }
 
-private val childMenuItemTitleSelectedStyle = Css.createClass {
-    color = Skin.palette.primaryColor
+private val childMenuItemTitleSelectedStyle by CssClass {
+    color = Skin.palette.sideMenuActiveTextColor
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -522,7 +425,7 @@ class CGroup(val title: String) : APureComponent() {
 
 }
 
-val groupStyle = Css.createClass {
+val groupStyle by CssClass {
     padding = "24px 16px 12px 16px"
     width = "100%"
     minWidth = "100%"
@@ -532,7 +435,7 @@ val groupStyle = Css.createClass {
     this["text-transform"] = "uppercase"
     fontSize = "12px"
     fontWeight = EFontWeight.Bold.cssValue
-    color = Skin.palette.negativeWeakTextColor
+    color = Skin.palette.sideMenuGroupTextColor
 }
 
 fun CMenuItemBlock.group(title: String) = this.registerComponent(CGroup(title), {})

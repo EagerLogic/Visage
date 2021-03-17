@@ -3,7 +3,7 @@ package visage.ds.components
 import visage.core.AComponent
 import visage.core.APureComponent
 import visage.core.Components
-import visage.dom.Css
+import visage.dom.CssClass
 import visage.dom.div
 import visage.ds.colorpalette.Skin
 
@@ -23,7 +23,7 @@ class CIcon(val icon: String, val color: String, val size: Int) : APureComponent
 
 }
 
-private val iconClass = Css.createClass {
+private val iconClass by CssClass {
     display = "inline-flex"
 }
 

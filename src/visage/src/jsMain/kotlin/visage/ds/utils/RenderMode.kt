@@ -134,7 +134,7 @@ object RenderMode {
     }
 
     private fun removePreviousViewportIfAny() {
-        val metaElements = window.document.getElementsByTagName("meta")!!
+        val metaElements = window.document.getElementsByTagName("meta")
         for (i in 0 until metaElements.length) {
             val e = metaElements[i]!!
             val name = e.getAttribute("name")
@@ -165,11 +165,11 @@ enum class ERenderMode(val minWidth: Int, val preferredWidth: Int, val preferred
      *
      * This mode is used on portrait mobile devices.
      *
-     * The preferred width is 640 pixels which can be fully used by content,
+     * The preferred width is 500 pixels which can be fully used by content,
      * but the actual screen width may
-     * vary between 640 - 999 pixels.
+     * vary between 500 - 999 pixels.
      */
-    Compressed(0, 640, 640, 999),
+    Compressed(0, 500, 500, 999),
 
     /**
      * This mode is used to render the page on a medium screen (Tablet).
