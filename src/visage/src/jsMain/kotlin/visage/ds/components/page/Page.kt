@@ -44,27 +44,15 @@ class CPage() : AComponent<CPage.Companion.State>() {
                         small = false,
                         menuVisible = true,
                         tabs = this@CPage.tabs,
-                        selectedTabIndex = this@CPage.state.tabIndex
+                        selectedTabIndex = this@CPage.state.tabIndex,
+                        "transparent"
                     )
+                    header.isLoading = this@CPage.isLoading
                     header.onSelectedTabChanged = {
                         this@CPage.state.tabIndex = it
                         this@CPage.refresh()
                     }
                     this.registerComponent(header, this@CPage.head!!.init)
-                }
-            }
-
-            // loading indicator
-            if (this@CPage.isLoading) {
-                div {
-                    classes = loadingIndicatorRootStyle
-                    if (SideMenu.isOpened && RenderMode.current == ERenderMode.Full) {
-                        style.left = "280px"
-                    }
-
-                    HorizontalLoadIndicator(null) {
-                        height = 3
-                    }
                 }
             }
 

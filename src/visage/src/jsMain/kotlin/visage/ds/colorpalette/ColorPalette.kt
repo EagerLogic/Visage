@@ -143,12 +143,9 @@ class DefaultDarkPalette : IColorPalette {
 
 object Skin {
     var palette: IColorPalette = DefaultLightPalette()
-    get () {
-        return field
-    }
-    set (value) {
-        field = value
-        Css.clearCache()
-        Visage.rerender()
-    }
+        set(value) {
+            field = value
+            Css.clearCache()
+            Visage.rerender()
+        }
 }

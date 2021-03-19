@@ -13,76 +13,132 @@ import visage.ds.utils.EFontWeight
 
 class Header(val title: String?, val init: (CHeader.() -> Unit) = {})
 
-class CHeader(val title: String?, private val small: Boolean, private val menuVisible: Boolean, private val tabs: List<CTab>, private val selectedTabIndex: Int) : APureComponent() {
+class CHeader(
+    val title: String?,
+    private val small: Boolean,
+    private val menuVisible: Boolean,
+    private val tabs: List<CTab>,
+    private val selectedTabIndex: Int,
+    private val loadColor: String
+) : APureComponent() {
 
     internal var onSelectedTabChanged: Listener<Int>? = null
 
+    var isLoading = false
+
     override fun Components.render(children: List<AComponent<*>>) {
         div {
-            classes = mainHeaderStyle
-            if (this@CHeader.small) {
-                style.height = "48px"
-            }
+            classes = rootHeaderStyle
 
-            if (this@CHeader.menuVisible) {
-                IconButton("menu") {
-                    variant = EButtonVariant.Link
-                    color = EButtonColor.Secondary
-                    onClick = this@CHeader::onMenuButtonClicked
-                    size = if (this@CHeader.small) EButtonSize.Normal else EButtonSize.Large
+            if (this@CHeader.isLoading) {
+                HorizontalLoadIndicator(null) {
+                    color = this@CHeader.loadColor
+                    if (this@CHeader.small) {
+                        height = 3
+                    } else {
+                        height = 5
+                    }
                 }
-
-                div { style.width = "16px"; style.minWidth = "16px"; style.maxWidth = "16px" }
-            }
-
-            div {
-                classes = titleStyle
-                if (this@CHeader.small) {
-                    style.fontSize = "16px"
-                }
-                if (this@CHeader.title != null) {
-                    +this@CHeader.title
-                }
-            }
-
-            for (child in children) {
+            } else {
                 div {
-                    style.width = "16px"
-                    style.minWidth = "16px"
-                    style.maxWidth = "16px"
+                    style.apply {
+                        width = "100%"
+                        height = if (this@CHeader.small) {
+                            "3px"
+                        } else {
+                            "5px"
+                        }
+                        minHeight = height
+                    }
                 }
-                +child
             }
-        }
-        if (this@CHeader.tabs.size > 1) {
+
             div {
-                classes = subHeaderStyle
+                classes = mainHeaderStyle
+                if (this@CHeader.small) {
+                    style.height = "42px"
+                }
 
-                this@CHeader.tabs.forEachIndexed { index, tab ->
-                    div {
-                        style.apply {
-                            width = "16px"
-                            minWidth = width
-                            maxWidth = width
-                        }
-                    }
-                    Tab(tab.title, index == this@CHeader.selectedTabIndex) {
-                        this@CHeader.onSelectedTabChanged?.invoke(index)
-                    }
-                    div {
-                        style.apply {
-                            width = "16px"
-                            minWidth = width
-                            maxWidth = width
-                        }
+                if (this@CHeader.isLoading) {
+                    attr["disabled"] = "true"
+                    style.pointerEvents = "none"
+                    style.opacity = "0.5"
+                }
+
+                if (this@CHeader.menuVisible) {
+                    IconButton("menu") {
+                        variant = EButtonVariant.Link
+                        color = EButtonColor.Secondary
+                        onClick = this@CHeader::onMenuButtonClicked
+                        size = if (this@CHeader.small) EButtonSize.Normal else EButtonSize.Large
                     }
 
+                    div { style.width = "16px"; style.minWidth = "16px"; style.maxWidth = "16px" }
+                }
+
+                div {
+                    classes = titleStyle
+                    if (this@CHeader.small) {
+                        style.fontSize = "16px"
+                    }
+                    if (this@CHeader.title != null) {
+                        +this@CHeader.title
+                    }
+                }
+
+                for (child in children) {
+                    div {
+                        style.width = "16px"
+                        style.minWidth = "16px"
+                        style.maxWidth = "16px"
+                    }
+                    +child
+                }
+            }
+
+
+            div {
+                style.apply {
+                    width = "100%"
+                    height = if (this@CHeader.small) {
+                        "3px"
+                    } else {
+                        "5px"
+                    }
+                    minHeight = height
+                }
+            }
+
+            if (this@CHeader.tabs.size > 1) {
+                div {
+                    classes = subHeaderStyle
+
+                    this@CHeader.tabs.forEachIndexed { index, tab ->
+                        div {
+                            style.apply {
+                                width = "16px"
+                                minWidth = width
+                                maxWidth = width
+                            }
+                        }
+                        Tab(tab.title, index == this@CHeader.selectedTabIndex) {
+                            this@CHeader.onSelectedTabChanged?.invoke(index)
+                        }
+                        div {
+                            style.apply {
+                                width = "16px"
+                                minWidth = width
+                                maxWidth = width
+                            }
+                        }
+
+                    }
                 }
             }
         }
     }
 
-    fun IconButton(icon: String, color: EButtonColor = EButtonColor.Secondary, onClick: (() -> Unit) ) {
+    fun IconButton(icon: String, color: EButtonColor = EButtonColor.Secondary, onClick: (() -> Unit)) {
         this.registerComponent(CButton(null, icon)) {
             size = if (this@CHeader.small) EButtonSize.Small else EButtonSize.Normal
             variant = EButtonVariant.Link
@@ -91,7 +147,12 @@ class CHeader(val title: String?, private val small: Boolean, private val menuVi
         }
     }
 
-    fun ResponsiveButtonWithIcon(icon: String, title: String, color: EButtonColor = EButtonColor.Primary, onClick: (() -> Unit)) =
+    fun ResponsiveButtonWithIcon(
+        icon: String,
+        title: String,
+        color: EButtonColor = EButtonColor.Primary,
+        onClick: (() -> Unit)
+    ) =
         this.registerComponent(CResponsiveButton(icon, title)) {
             size = if (this@CHeader.small) EButtonSize.Small else EButtonSize.Normal
             variant = EButtonVariant.Filled
@@ -100,7 +161,12 @@ class CHeader(val title: String?, private val small: Boolean, private val menuVi
             this.onClick = onClick
         }
 
-    fun ResponsiveButton(icon: String, title: String, color: EButtonColor = EButtonColor.Primary, onClick: (() -> Unit)) =
+    fun ResponsiveButton(
+        icon: String,
+        title: String,
+        color: EButtonColor = EButtonColor.Primary,
+        onClick: (() -> Unit)
+    ) =
         this.registerComponent(CResponsiveButton(icon, title)) {
             size = if (this@CHeader.small) EButtonSize.Small else EButtonSize.Normal
             variant = EButtonVariant.Filled
@@ -119,11 +185,19 @@ class CHeader(val title: String?, private val small: Boolean, private val menuVi
 
 }
 
+val rootHeaderStyle by CssClass {
+    width = "100%"
+    minWidth = width
+    maxWidth = width
+    overflow = "hidden"
+    backgroundColor = Skin.palette.mainHeaderBgColor
+}
+
 val mainHeaderStyle by CssClass {
     width = "100%"
     minWidth = width
     maxWidth = width
-    height = "64px"
+    height = "54px"
     minHeight = height
     maxHeight = height
     overflow = "hidden"
@@ -189,28 +263,29 @@ class CPageBody() : APureComposite() {
 
 // -------------------------------------------------------------------------------------------------
 
-private fun Components.Tab(title: String, isSelected: Boolean, onClick: () -> Unit) = this.registerFunctionalComponent({}) {
-    div {
-        classes = tabStyle
-        if (isSelected) {
-            style.apply {
-                color = Skin.palette.primaryColor
-                borderBottom = "3px solid ${Skin.palette.primaryColor}"
+private fun Components.Tab(title: String, isSelected: Boolean, onClick: () -> Unit) =
+    this.registerFunctionalComponent({}) {
+        div {
+            classes = tabStyle
+            if (isSelected) {
+                style.apply {
+                    color = Skin.palette.primaryColor
+                    borderBottom = "3px solid ${Skin.palette.primaryColor}"
+                }
+
             }
 
-        }
+            events.onClick = {
+                onClick()
+            }
 
-        events.onClick = {
-            onClick()
-        }
+            div {
+                style.display = "inline-block"
 
-        div {
-            style.display = "inline-block"
-
-            +title
+                +title
+            }
         }
     }
-}
 
 private val tabStyle by CssClass {
     height = "100%"

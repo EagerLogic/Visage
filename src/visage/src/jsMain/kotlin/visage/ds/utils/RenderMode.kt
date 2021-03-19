@@ -70,6 +70,9 @@ object RenderMode {
         window.onresize = {
             onScreenSizeChanged()
         }
+        window.addEventListener("orientationchange", {
+            onScreenSizeChanged()
+        })
         update()
     }
 

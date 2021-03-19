@@ -27,6 +27,7 @@ fun Components.MainScene() = this.registerFunctionalComponent({}) {
                 group("Design System")
                 menuItem("Showcase", "visibility", "/ds/showcase.vsg")
                 groupMenuItem("Components", "dashboard", "/ds/components/") {
+                    menuItem("AttentionMessage", "/ds/components/attentionMessage.vsg")
                     menuItem("Button", "/ds/components/button.vsg")
                     menuItem("CheckBox", "/ds/components/checkBox.vsg")
                     menuItem("Select", "/ds/components/select.vsg")
@@ -65,6 +66,9 @@ fun Components.MainScene() = this.registerFunctionalComponent({}) {
 //            }
 
             // design system
+            route("/ds/components/attentionMessage.vsg") {
+                AttentionMessageScene()
+            }
             route("/ds/components/button.vsg") {
                 ButtonScene()
             }

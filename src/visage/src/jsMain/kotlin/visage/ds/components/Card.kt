@@ -10,40 +10,92 @@ import visage.ds.colorpalette.Skin
 import visage.ds.components.page.CHeader
 import visage.ds.components.page.CPageBody
 import visage.ds.components.page.Header
+import visage.ds.utils.ETextAlign
 
 fun Components.Card(init: CCard.() -> Unit) = this.registerComponent(CCard(), init)
 fun CPageBody.Card(init: CCard.() -> Unit) = this.registerComponent(CCard(), init)
 
 class CCard() : APureComponent() {
 
-    var color: String? = Skin.palette.primaryColor
+    var color: String = Skin.palette.primaryColor
+    var infoText: String? = null
+    var isLoading: Boolean = false
     private var header: Header? = null
     private var body: (CCardBody.() -> Unit)? = null
     private var footer: (CCardFooter.() -> Unit)? = null
+    private val messages = AttentionMessagesDesc()
 
     override fun Components.render(children: List<AComponent<*>>) {
         div {
             classes = cardRootStyle
-            if (this@CCard.color != null) {
-                style.borderTopColor = this@CCard.color!!
+
+            div {
+                style.apply {
+                    width = "100%"
+                    height = "3px"
+                    minHeight = height
+                    backgroundColor = this@CCard.color
+                }
             }
 
-
             if (this@CCard.header != null) {
-                this.registerComponent(CHeader(this@CCard.header!!.title, true, false, listOf(), -1), this@CCard.header!!.init)
+                val header = CHeader(this@CCard.header!!.title, true, false, listOf(), -1, this@CCard.color)
+                header.isLoading = this@CCard.isLoading
+                this.registerComponent(header, this@CCard.header!!.init)
+            }
+
+            if (this@CCard.infoText != null) {
+                div {
+                    style.padding = "16px 16px 16px 16px"
+
+                    Text(this@CCard.infoText!!, ETextStyles.Weak, true) {
+                        textAlign = ETextAlign.CENTER
+                    }
+                }
+            }
+
+            if (this@CCard.messages.messages.size > 0) {
+                div {
+                    style.apply {
+                        width = "100%"
+                        minWidth = width
+                        padding = "0px 16px"
+                    }
+                    this@CCard.messages.messages.forEachIndexed { index, msg ->
+                        if (index > 0) {
+                            div {
+                                style.apply {
+                                    height = "8px"
+                                    minHeight = height
+                                }
+                            }
+                        }
+                        AttentionMessage(msg.type, msg.message)
+                    }
+                    div {
+                        style.apply {
+                            height = "16px"
+                            minHeight = height
+                        }
+                    }
+                }
             }
 
             if (this@CCard.body != null) {
-                this.registerComponent(CCardBody(), this@CCard.body!!)
+                this.registerComponent(CCardBody(this@CCard.isLoading), this@CCard.body!!)
             }
             if (this@CCard.footer != null) {
-                this.registerComponent(CCardFooter(), this@CCard.footer!!)
+                this.registerComponent(CCardFooter(this@CCard.isLoading), this@CCard.footer!!)
             }
         }
     }
 
     fun header(title: String = "", init: (CHeader.() -> Unit) = {}) {
         this.header = Header(title, init)
+    }
+
+    fun messages(init: AttentionMessagesDesc.() -> Unit) {
+        messages.init()
     }
 
     fun body(init: CCardBody.() -> Unit) {
@@ -63,15 +115,41 @@ private val cardRootStyle by CssClass {
     overflow = "hidden"
     backgroundColor = Skin.palette.cardBgColor
     boxShadow = "1px 1px 5px rgba(0,0,0, 20%)"
-    borderTop = "3px solid ${Skin.palette.cardBgColor}"
 }
+
+class AttentionMessagesDesc {
+    internal val messages = mutableListOf<AttentionMessageDesc>()
+
+    fun info(message: String) {
+        messages.add(AttentionMessageDesc(EAttentionMessageType.Info, message))
+    }
+
+    fun success(message: String) {
+        messages.add(AttentionMessageDesc(EAttentionMessageType.Success, message))
+    }
+
+    fun warning(message: String) {
+        messages.add(AttentionMessageDesc(EAttentionMessageType.Warning, message))
+    }
+
+    fun danger(message: String) {
+        messages.add(AttentionMessageDesc(EAttentionMessageType.Danger, message))
+    }
+}
+
+internal class AttentionMessageDesc(val type: EAttentionMessageType, val message: String)
 
 // -------------------------------------------------------------------------------------------------------
 
-class CCardBody() : APureComposite() {
+class CCardBody(private val isLoading: Boolean) : APureComposite() {
     override fun Components.render(children: List<AComponent<*>>) {
         div {
             classes = bodyRootStyle
+            if (this@CCardBody.isLoading) {
+                attr["disabled"] = "true"
+                style.opacity = "0.3"
+                style.pointerEvents = "none"
+            }
 
             children.forEachIndexed { index, child ->
                 if (index > 0) {
@@ -101,13 +179,17 @@ private val bodyRootStyle by CssClass {
 
 // ---------------------------------------------------------------------------------------------------------
 
-class CCardFooter() : APureComponent() {
+class CCardFooter(private val isLoading: Boolean) : APureComponent() {
 
     var text: String? = null
 
     override fun Components.render(children: List<AComponent<*>>) {
         div {
             classes = footerRootStyle
+            if (this@CCardFooter.isLoading) {
+                attr["disabled"] = "true"
+                style.pointerEvents = "none"
+            }
 
             div {
                 classes = footerTextStyle
@@ -128,6 +210,9 @@ class CCardFooter() : APureComponent() {
                 div {
                     style.flexGrow = "0"
                     style.flexShrink = "0"
+                    if (this@CCardFooter.isLoading) {
+                        style.opacity = "0.3"
+                    }
                     +child
                 }
             }

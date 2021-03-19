@@ -14,7 +14,7 @@
 
     <body>
         <div id="root" style="width: 100%; height: 100%;"></div>
-        <script src="/app.js?v=16" type="text/javascript"></script>
+        <script src="/app.js?v=19" type="text/javascript"></script>
     </body>
 
 </html>

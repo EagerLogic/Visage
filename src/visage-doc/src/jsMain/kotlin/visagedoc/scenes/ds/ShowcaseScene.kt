@@ -2,6 +2,7 @@ package visagedoc.scenes.ds
 
 import visage.core.AComponent
 import visage.core.Components
+import visage.core.Visage
 import visage.ds.colorpalette.DefaultDarkPalette
 import visage.ds.colorpalette.DefaultLightPalette
 import visage.ds.colorpalette.Skin
@@ -36,6 +37,7 @@ class CShowcaseScene() : AComponent<CShowcaseScene.Companion.State>() {
                     } else {
                         Skin.palette = DefaultLightPalette()
                     }
+                    Visage.rerender()
                 }
             }
 
@@ -47,6 +49,13 @@ class CShowcaseScene() : AComponent<CShowcaseScene.Companion.State>() {
                     Card {  }
                 }
                 Card {
+                    infoText = "This is an info text which can be attached to every card to describe what it is good for."
+                    messages {
+                        info("This is an info message")
+                        success("This is a success message")
+                        warning("This is a warning message")
+                        danger("This is a danger message")
+                    }
                     header("Example card") {
                         IconButton("group") {}
                         ResponsiveButtonWithIcon("add", "Show modal", EButtonColor.Success) {
@@ -108,14 +117,28 @@ class CShowcaseScene() : AComponent<CShowcaseScene.Companion.State>() {
                     }
                 }
 
+                Card {
+                    header("Example history list")
+                    body {
+                        HistoryList {
+                            itemWithIcon("First item", "2021-01-15", "This is an exxample item with some fake text", "home")
+                            itemWithIcon("First item", "2021-01-15", "This is an exxample item with some fake text", "home", Skin.palette.successColor)
+                            itemWithIcon("First item", "2021-01-15", "This is an exxample item with some fake text", "home", Skin.palette.warningColor)
+                            itemWithIcon("First item", "2021-01-15", "This is an exxample item with some fake text", "home", Skin.palette.dangerColor)
+                        }
+                    }
+                }
+
                 if (this@CShowcaseScene.state.isDialogOpen) {
                     Modal("Example dialog") {
+                        infoText = "This is an infotext"
+                        error = "This is an error message"
                         TextField("Email", FieldModel("")) {
                             infoText = "Your email address"
                         }
                         Select(
                             "Gender",
-                            MetaFieldModel(
+                            MetaFieldModel<String, List<SelectOption>>(
                                 "male",
                                 listOf(SelectOption("male", "Male"), SelectOption("female", "Female"))
                             )

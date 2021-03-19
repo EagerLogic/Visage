@@ -65,13 +65,17 @@ class CModal(private val title: String) : APureComposite() {
         }
     }
 
-    fun renderDialog(receiver: Components, children: List<AComponent<*>>) {
+    private fun renderDialog(receiver: Components, children: List<AComponent<*>>) {
         receiver.Card {
+            infoText = this@CModal.infoText
+            isLoading = this@CModal.isLoading
+            if (this@CModal.error != null) {
+                messages {
+                    danger(this@CModal.error!!)
+                }
+            }
             header(this@CModal.title)
             body {
-                // TODO infotext
-                // TODO error
-                // TODO isLoading
                 div {
                     style.apply {
                         width = "100%"

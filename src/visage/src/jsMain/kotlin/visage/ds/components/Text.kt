@@ -12,7 +12,6 @@ class TextStyle(
     val fontSize: Int,
     val fontWeight: EFontWeight,
     val color: String,
-    val textAlign: ETextAlign,
     val uppercase: Boolean
 )
 
@@ -24,7 +23,6 @@ enum class ETextStyles(private val init: () -> TextStyle) {
                 fontSize = 14,
                 fontWeight = EFontWeight.Medium,
                 color = Skin.palette.strongTextColor,
-                textAlign = ETextAlign.LEFT,
                 uppercase = false
             )
         }
@@ -35,7 +33,6 @@ enum class ETextStyles(private val init: () -> TextStyle) {
                 fontSize = 14,
                 fontWeight = EFontWeight.Regular,
                 color = Skin.palette.normalTextColor,
-                textAlign = ETextAlign.LEFT,
                 uppercase = false
             )
         }
@@ -46,7 +43,6 @@ enum class ETextStyles(private val init: () -> TextStyle) {
                 fontSize = 14,
                 fontWeight = EFontWeight.Regular,
                 color = Skin.palette.weakTextColor,
-                textAlign = ETextAlign.LEFT,
                 uppercase = false
             )
         }
@@ -57,7 +53,6 @@ enum class ETextStyles(private val init: () -> TextStyle) {
                 fontSize = 12,
                 fontWeight = EFontWeight.Regular,
                 color = Skin.palette.weakTextColor,
-                textAlign = ETextAlign.LEFT,
                 uppercase = false
             )
         }
@@ -74,6 +69,8 @@ enum class ETextStyles(private val init: () -> TextStyle) {
 
 class CText internal constructor(val text: String, val style: TextStyle, val multiLine: Boolean) : APureComponent() {
 
+    var textAlign: ETextAlign = ETextAlign.LEFT
+
     override fun Components.render(children: List<AComponent<*>>) {
         div {
             style.apply {
@@ -83,7 +80,7 @@ class CText internal constructor(val text: String, val style: TextStyle, val mul
                 fontSize = "${this@CText.style.fontSize}px"
                 fontWeight = this@CText.style.fontWeight.cssValue
                 color = this@CText.style.color
-                textAlign = when (this@CText.style.textAlign) {
+                textAlign = when (this@CText.textAlign) {
                     ETextAlign.LEFT -> "left"
                     ETextAlign.CENTER -> "center"
                     ETextAlign.RIGHT -> "right"
@@ -105,8 +102,8 @@ class CText internal constructor(val text: String, val style: TextStyle, val mul
 
 }
 
-fun Components.Text(text: String, style: ETextStyles = ETextStyles.Normal, multiLine: Boolean = false) =
-        this.registerComponent(CText(text, style.textStyle, multiLine), {})
+fun Components.Text(text: String, style: ETextStyles = ETextStyles.Normal, multiLine: Boolean = false, init: CText.() -> Unit = {}) =
+        this.registerComponent(CText(text, style.textStyle, multiLine), init)
 
-fun Components.Text(text: String, style: TextStyle, multiLine: Boolean = false) =
-        this.registerComponent(CText(text, style, multiLine), {})
+fun Components.Text(text: String, style: TextStyle, multiLine: Boolean = false, init: CText.() -> Unit = {}) =
+        this.registerComponent(CText(text, style, multiLine), init)

@@ -5,10 +5,10 @@ import visage.core.AComponent
 import visage.core.APureComponent
 import visage.core.Components
 import visage.dom.div
+import visage.ds.components.Button
 import visage.ds.components.EButtonColor
 import visage.ds.components.EButtonSize
 import visage.ds.components.EButtonVariant
-import visage.ds.components.ResponsiveButton
 import visage.ds.components.page.Page
 import visagedoc.components.*
 
@@ -33,23 +33,23 @@ class CButtonScene : APureComponent() {
                     }
 
                     p {
-                        ResponsiveButton("Primary") {
+                        Button("Primary") {
                             color = EButtonColor.Primary
                         }
                         div { style.width = "16px"; style.display = "inline-block" }
-                        ResponsiveButton("Secondary") {
+                        Button("Secondary") {
                             color = EButtonColor.Secondary
                         }
                         div { style.width = "16px"; style.display = "inline-block" }
-                        ResponsiveButton("Success") {
+                        Button("Success") {
                             color = EButtonColor.Success
                         }
                         div { style.width = "16px"; style.display = "inline-block" }
-                        ResponsiveButton("Warning") {
+                        Button("Warning") {
                             color = EButtonColor.Warning
                         }
                         div { style.width = "16px"; style.display = "inline-block" }
-                        ResponsiveButton("Danger") {
+                        Button("Danger") {
                             color = EButtonColor.Danger
                         }
                     }
@@ -86,15 +86,15 @@ Button("Danger") {
                         +"You can choose from 3 different sizes. The default is Normal."
                     }
                     p {
-                        ResponsiveButton("Small") {
+                        Button("Small") {
                             size = EButtonSize.Small
                         }
                         div { style.width = "16px"; style.display = "inline-block" }
-                        ResponsiveButton("Normal") {
+                        Button("Normal") {
                             size = EButtonSize.Normal
                         }
                         div { style.width = "16px"; style.display = "inline-block" }
-                        ResponsiveButton("Large") {
+                        Button("Large") {
                             size = EButtonSize.Large
                         }
                     }
@@ -121,15 +121,15 @@ Button("Large") {
                         +"You can also choose from 3 different variants. The default is Filled."
                     }
                     p {
-                        ResponsiveButton("Filled") {
+                        Button("Filled") {
                             variant = EButtonVariant.Filled
                         }
                         div { style.width = "16px"; style.display = "inline-block" }
-                        ResponsiveButton("Outlined") {
+                        Button("Outlined") {
                             variant = EButtonVariant.Outlined
                         }
                         div { style.width = "16px"; style.display = "inline-block" }
-                        ResponsiveButton("Link") {
+                        Button("Link") {
                             variant = EButtonVariant.Link
                         }
                     }
@@ -155,7 +155,7 @@ Button("Link") {
                         +"You can listen to click events using the onClick attribute."
                     }
                     p {
-                        ResponsiveButton("Click me!") {
+                        Button("Click me!") {
                             onClick = {
                                 window.alert("Thanks!")
                             }

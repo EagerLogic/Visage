@@ -2,6 +2,7 @@ package visage.ds.components
 
 import visage.core.*
 import visage.dom.div
+import visage.ds.colorpalette.Skin
 
 class MHorizontalLoadIndicator(val progress: Int?) : AComponent<MHorizontalLoadIndicator.Companion.State>() {
 
@@ -12,6 +13,7 @@ class MHorizontalLoadIndicator(val progress: Int?) : AComponent<MHorizontalLoadI
     }
 
     var height: Int = 8
+    var color: String = Skin.palette.primaryColor
 
     override fun initState(): State {
         if (progress == null) {
@@ -40,14 +42,14 @@ class MHorizontalLoadIndicator(val progress: Int?) : AComponent<MHorizontalLoadI
                 width = "100%"
                 height = "${this@MHorizontalLoadIndicator.height}px"
                 display = "flex"
-                backgroundColor = "#ccc"
+                backgroundColor = Skin.palette.subHeaderBgColor
             }
 
             div {
                 style.apply {
                     width = "${this@MHorizontalLoadIndicator.state.progress}%"
                     height = "100%"
-                    backgroundColor = EButtonColor.Primary.normalColor
+                    backgroundColor = this@MHorizontalLoadIndicator.color
                 }
             }
         }

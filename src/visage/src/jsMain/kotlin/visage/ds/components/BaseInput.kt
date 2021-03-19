@@ -133,7 +133,6 @@ object FieldTextStyles {
                 12,
                 EFontWeight.SemiBold,
                 Skin.palette.weakTextColor,
-                ETextAlign.LEFT,
                 false
             )
         }
@@ -143,7 +142,6 @@ object FieldTextStyles {
                 12,
                 EFontWeight.SemiBold,
                 Skin.palette.primaryColor,
-                ETextAlign.LEFT,
                 false
             )
         }
@@ -153,7 +151,6 @@ object FieldTextStyles {
                 12,
                 EFontWeight.SemiBold,
                 Skin.palette.errorColor,
-                ETextAlign.LEFT,
                 false
             )
         }
@@ -163,7 +160,6 @@ object FieldTextStyles {
                 12,
                 EFontWeight.Regular,
                 Skin.palette.weakTextColor,
-                ETextAlign.LEFT,
                 false
             )
         }
@@ -173,7 +169,6 @@ object FieldTextStyles {
                 12,
                 EFontWeight.Regular,
                 Skin.palette.errorColor,
-                ETextAlign.LEFT,
                 false
             )
         }
