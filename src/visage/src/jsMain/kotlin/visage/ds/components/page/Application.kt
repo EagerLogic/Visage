@@ -4,6 +4,7 @@ import visage.core.*
 import visage.dom.CssClass
 import visage.dom.div
 import visage.ds.colorpalette.Skin
+import visage.ds.components.CSnackBar
 import visage.ds.utils.RenderMode
 
 fun Components.Application(init: CApplication.() -> Unit) = this.registerComponent(CApplication(), init)
@@ -71,6 +72,7 @@ class CApplication : APureComposite() {
                 }
             }
         }
+        this.registerComponent(CSnackBar(), {})
     }
 
 }

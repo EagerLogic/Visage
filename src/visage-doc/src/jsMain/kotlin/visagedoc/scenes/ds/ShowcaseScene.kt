@@ -121,10 +121,10 @@ class CShowcaseScene() : AComponent<CShowcaseScene.Companion.State>() {
                     header("Example history list")
                     body {
                         HistoryList {
-                            itemWithIcon("First item", "2021-01-15", "This is an exxample item with some fake text", "home")
-                            itemWithIcon("First item", "2021-01-15", "This is an exxample item with some fake text", "home", Skin.palette.successColor)
-                            itemWithIcon("First item", "2021-01-15", "This is an exxample item with some fake text", "home", Skin.palette.warningColor)
-                            itemWithIcon("First item", "2021-01-15", "This is an exxample item with some fake text", "home", Skin.palette.dangerColor)
+                            itemWithIcon("home", "First item", "2021-01-15", "This is an exxample item with some fake text")
+                            itemWithIcon("home", "First item", "2021-01-15", "This is an exxample item with some fake text",  Skin.palette.successColor)
+                            itemWithIcon("home", "First item", "2021-01-15", "This is an exxample item with some fake text",  Skin.palette.warningColor)
+                            itemWithIcon("home", "First item", "2021-01-15", "This is an exxample item with some fake text",  Skin.palette.dangerColor)
                         }
                     }
                 }
