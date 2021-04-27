@@ -28,7 +28,7 @@ This module helps a lot to communicate with any JVM backend. The goal of this pr
 ### Validation (Coming soon)
 A simple but powerful common validation library to eliminate the need to rewrite the validation code on both client and server side. This is also an optional modul.
 
-### Components (Coming soon)
+### Design System (WIP)
 This module contains basic Visage components (like Button, TextField, RadioButton, etc...) and layouts (like HBox, VBox, Grid, etc...) which can be used out of the box to create stunning UI-s. This is an optional module, you don't need to use any of this components, you can use your own or any other third party Visage components.
 
 
