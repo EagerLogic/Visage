@@ -4,6 +4,7 @@ import visage.core.AComponent
 import visage.core.Components
 import visage.dom.CssClass
 import visage.dom.div
+import visage.ds.colorpalette.Skin
 import visage.ds.components.*
 import visage.ds.utils.ERenderMode
 import visage.ds.utils.RenderMode
@@ -29,30 +30,53 @@ class CPage() : AComponent<CPage.Companion.State>() {
     }
 
     override fun Components.render(children: List<AComponent<*>>) {
+        // header
+        if (this@CPage.head != null) {
+            div {
+                classes = headerRootStyle
+                if (SideMenu.isOpened && RenderMode.current == ERenderMode.Full) {
+                    style.left = "280px"
+                }
+
+                if (this@CPage.isLoading) {
+                    HorizontalLoadIndicator(null) {
+                        color = Skin.palette.primaryColor
+                        bgColor = Skin.palette.mainHeaderBgColor
+                        height = 3
+                    }
+                } else {
+                    div {
+                        style.apply {
+                            width = "100%"
+                            height = "3px"
+                            minHeight = height
+                            backgroundColor = Skin.palette.mainHeaderBgColor
+                        }
+                    }
+                }
+                val header = CHeader(
+                    title = this@CPage.head!!.title,
+                    small = false,
+                    menuVisible = true,
+                    tabs = this@CPage.tabs,
+                    selectedTabIndex = this@CPage.state.tabIndex,
+                    this@CPage.isLoading
+                )
+                header.onSelectedTabChanged = {
+                    this@CPage.state.tabIndex = it
+                    this@CPage.refresh()
+                }
+                this.registerComponent(header, this@CPage.head!!.init)
+            }
+        }
+
         div {
             classes = rootStyle
 
-            // header
-            if (this@CPage.head != null) {
-                div {
-                    classes = headerRootStyle
-                    if (SideMenu.isOpened && RenderMode.current == ERenderMode.Full) {
-                        style.left = "280px"
-                    }
-                    val header = CHeader(
-                        title = this@CPage.head!!.title,
-                        small = false,
-                        menuVisible = true,
-                        tabs = this@CPage.tabs,
-                        selectedTabIndex = this@CPage.state.tabIndex,
-                        "transparent"
-                    )
-                    header.isLoading = this@CPage.isLoading
-                    header.onSelectedTabChanged = {
-                        this@CPage.state.tabIndex = it
-                        this@CPage.refresh()
-                    }
-                    this.registerComponent(header, this@CPage.head!!.init)
+            if (this@CPage.isLoading) {
+                style.apply {
+                    opacity = "0.5"
+                    pointerEvents = "none"
                 }
             }
 

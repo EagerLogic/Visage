@@ -26,8 +26,6 @@ interface IColorPalette {
     val bgColor: String
 
     val mainHeaderBgColor: String
-    val subHeaderBgColor: String
-    val subHeader2BgColor: String
 
     val cardBgColor: String
     val cardFooterBgColor: String
@@ -71,8 +69,6 @@ class DefaultLightPalette : IColorPalette {
     override val bgColor: String = "#f4f4f4"
 
     override val mainHeaderBgColor: String = "#fff"
-    override val subHeaderBgColor: String = "#e8e8e8"
-    override val subHeader2BgColor: String = "#eee"
 
     override val cardBgColor: String = "#fff"
     override val cardFooterBgColor: String = "#f8f8f8"
@@ -117,8 +113,6 @@ class DefaultDarkPalette : IColorPalette {
     override val bgColor: String = "#404040"
 
     override val mainHeaderBgColor: String = "#303030"
-    override val subHeaderBgColor: String = "#383838"
-    override val subHeader2BgColor: String = "#eee"
 
     override val cardBgColor: String = "#303030"
     override val cardFooterBgColor: String = "#383838"

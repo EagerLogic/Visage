@@ -39,6 +39,7 @@ class CSnackBar() : AComponent<CSnackBar.Companion.State>() {
         class State() {
             internal val items = mutableListOf<SnackBarItem>()
             var timerId: Int? = null
+            internal var listener: ((item: SnackBarItem) -> Unit)? = null
         }
     }
 
@@ -47,11 +48,12 @@ class CSnackBar() : AComponent<CSnackBar.Companion.State>() {
     }
 
     override fun onComponentDidMount() {
-        SnackBar.onShow.addListener(this::handleItemAdded)
+        this.state.listener = this::handleItemAdded
+        SnackBar.onShow.addListener(this.state.listener!!)
     }
 
     override fun onComponentWillUnmount() {
-        SnackBar.onShow.removeListener(this::handleItemAdded)
+        SnackBar.onShow.removeListener(this.state.listener!!)
         this.stopTimerIfNeeded()
     }
 

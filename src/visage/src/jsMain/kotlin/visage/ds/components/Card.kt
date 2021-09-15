@@ -29,18 +29,25 @@ class CCard() : APureComponent() {
         div {
             classes = cardRootStyle
 
-            div {
-                style.apply {
-                    width = "100%"
-                    height = "3px"
-                    minHeight = height
-                    backgroundColor = this@CCard.color
+            if (this@CCard.isLoading) {
+                HorizontalLoadIndicator(null) {
+                    color = this@CCard.color
+                    bgColor = Skin.palette.cardBgColor
+                    height = 3
+                }
+            } else {
+                div {
+                    style.apply {
+                        width = "100%"
+                        height = "3px"
+                        minHeight = height
+                        backgroundColor = this@CCard.color
+                    }
                 }
             }
 
             if (this@CCard.header != null) {
-                val header = CHeader(this@CCard.header!!.title, true, false, listOf(), -1, this@CCard.color)
-                header.isLoading = this@CCard.isLoading
+                val header = CHeader(this@CCard.header!!.title, true, false, listOf(), -1, this@CCard.isLoading)
                 this.registerComponent(header, this@CCard.header!!.init)
             }
 

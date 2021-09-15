@@ -19,39 +19,14 @@ class CHeader(
     private val menuVisible: Boolean,
     private val tabs: List<CTab>,
     private val selectedTabIndex: Int,
-    private val loadColor: String
+    private val isLoading: Boolean
 ) : APureComponent() {
 
     internal var onSelectedTabChanged: Listener<Int>? = null
 
-    var isLoading = false
-
     override fun Components.render(children: List<AComponent<*>>) {
         div {
             classes = rootHeaderStyle
-
-            if (this@CHeader.isLoading) {
-                HorizontalLoadIndicator(null) {
-                    color = this@CHeader.loadColor
-                    if (this@CHeader.small) {
-                        height = 3
-                    } else {
-                        height = 5
-                    }
-                }
-            } else {
-                div {
-                    style.apply {
-                        width = "100%"
-                        height = if (this@CHeader.small) {
-                            "3px"
-                        } else {
-                            "5px"
-                        }
-                        minHeight = height
-                    }
-                }
-            }
 
             div {
                 classes = mainHeaderStyle
@@ -96,15 +71,11 @@ class CHeader(
                 }
             }
 
-
+            // bottom load balancer
             div {
                 style.apply {
                     width = "100%"
-                    height = if (this@CHeader.small) {
-                        "3px"
-                    } else {
-                        "5px"
-                    }
+                    height = "3px"
                     minHeight = height
                 }
             }
@@ -197,7 +168,7 @@ val mainHeaderStyle by CssClass {
     width = "100%"
     minWidth = width
     maxWidth = width
-    height = "54px"
+    height = "48px"
     minHeight = height
     maxHeight = height
     overflow = "hidden"

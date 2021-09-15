@@ -14,6 +14,7 @@ class MHorizontalLoadIndicator(val progress: Int?) : AComponent<MHorizontalLoadI
 
     var height: Int = 8
     var color: String = Skin.palette.primaryColor
+    var bgColor: String = Skin.palette.cardBgColor
 
     override fun initState(): State {
         if (progress == null) {
@@ -42,14 +43,27 @@ class MHorizontalLoadIndicator(val progress: Int?) : AComponent<MHorizontalLoadI
                 width = "100%"
                 height = "${this@MHorizontalLoadIndicator.height}px"
                 display = "flex"
-                backgroundColor = Skin.palette.subHeaderBgColor
+                backgroundColor = this@MHorizontalLoadIndicator.bgColor
             }
+            if (this@MHorizontalLoadIndicator.progress == null) {
+                div {
+                    style.width = "${this@MHorizontalLoadIndicator.state.progress / 2}%"
+                }
 
-            div {
-                style.apply {
-                    width = "${this@MHorizontalLoadIndicator.state.progress}%"
-                    height = "100%"
-                    backgroundColor = this@MHorizontalLoadIndicator.color
+                div {
+                    style.apply {
+                        width = "50%"
+                        height = "100%"
+                        backgroundColor = this@MHorizontalLoadIndicator.color
+                    }
+                }
+            } else {
+                div {
+                    style.apply {
+                        width = "${this@MHorizontalLoadIndicator.state.progress}%"
+                        height = "100%"
+                        backgroundColor = this@MHorizontalLoadIndicator.color
+                    }
                 }
             }
         }
