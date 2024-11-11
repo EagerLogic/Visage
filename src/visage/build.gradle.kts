@@ -1,6 +1,5 @@
 plugins {
     kotlin("multiplatform") version "1.4.0"
-    id("org.jetbrains.dokka") version "1.4.0"
     kotlin("plugin.serialization") version "1.4.0"
     kotlin("kapt") version "1.4.0"
     `maven-publish`
@@ -69,11 +68,11 @@ kotlin {
 }
 
 tasks {
-    create<Jar>("javadocJar") {
-        dependsOn(dokkaJavadoc)
-        archiveClassifier.set("javadoc")
-        from(dokkaJavadoc.get().outputDirectory)
-    }
+//    create<Jar>("javadocJar") {
+//        dependsOn(dokkaJavadoc)
+//        archiveClassifier.set("javadoc")
+//        from(dokkaJavadoc.get().outputDirectory)
+//    }
 }
 
 val ossUser = System.getenv("OSS_USER")
@@ -120,7 +119,7 @@ publishing {
         artifactId = artifactName
         version = libraryVersion
 
-        artifact(tasks["javadocJar"])
+//        artifact(tasks["javadocJar"])
 
         pom {
             name.set(libraryName)
